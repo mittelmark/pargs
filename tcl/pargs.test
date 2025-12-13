@@ -1,0 +1,53 @@
+#!/usr/bin/env tclsh
+package require tcltest
+source [file rootname [info script]].tcl
+
+puts stderr "starting Tcl tests"
+tcltest::test pargs-test-1.1 {
+    Simple Tcl starter!
+} -body {
+     set x 1
+} -result {1}
+
+set DOC {
+    Usage: pargs.tcl (-h|--help|-V,--version)
+              <INFILE> [OUTFILE]
+              
+    Options:
+        -h,--help       display this help page
+        -V,--version    display the application version
+        -i,--int        some integer, default: 10
+        
+    Positional Arguments:
+         INFILE          input file to be parsed
+         [OUTFILE]       outfile [default: '-']
+}
+
+tcltest::test pargs-test-1.2 {
+    Check for version!
+} -body {
+    set pargs [Pargs new -doc $DOC -argv $argv -version 0.0.1 -color true -exit false]
+    set v [$pargs version]
+} -result {0.0.1}
+
+tcltest::test pargs-test-1.3 {
+    Check for integer given!
+} -body {
+    rename $pargs ""
+    set pargs [Pargs new -doc $DOC -argv [list -i 21] -version 0.0.1 -color true -exit false]
+    set v [$pargs version]
+    set i [$pargs parse int -i --int 25]
+    set res "$v - $i"
+} -result {0.0.1 - 21}
+
+tcltest::test pargs-test-1.4 {
+    Check for integer default!
+} -body {
+    rename $pargs ""
+    set pargs [Pargs new -doc $DOC -argv [list] -version 0.0.1 -color true -exit false]
+    set v [$pargs version]
+    set i [$pargs parse int -i --int 25]
+    set res "$v - $i"
+} -result {0.0.1 - 25}
+
+::tcltest::cleanupTests 0
