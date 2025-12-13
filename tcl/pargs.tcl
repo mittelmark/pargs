@@ -35,9 +35,19 @@
 #' is written on top and thereafter, separated by an empty line follows the explanation
 #' of options and arguments. Usally first should be a check of the correct number of arguments,
 #' a check for the presence of options, after all supported options are checked,
-#' the presence of unsupported options should be done and thereafter the parsing of positional command line options. See the following code.
-#' for an example:
+#' the presence of unsupported options should be done and thereafter the parsing of positional command line options. 
 #' 
+#' So here is the complete pipeline:
+#' 
+#' - parser creation
+#' - display usage if necessary
+#' - check help flags and display help if requested
+#' - check subcommand if necessary
+#' - parse options if necessary
+#' - check leftover options
+#' - parse positionals
+#' - start program
+#'
 #' ## API
 #' ![](https://kroki.io/plantuml/svg/eNptkFFuwzAIht9zCqtPXpZcoFKlHmFXoA51rGITgd2pmnb3uZtrtdJ44_-AHzhqBskl0uAIVM0HiFfzNZga72YcecuBk46j2RsQgdsv-aPzwq7KmiUk_6zXGdcKKGh-lq8oWof92-KYWCo5MRNCav4JP-19obeWuxXdZW472a5yOgdfBF9qUYTFRvUPYUXaes8GomjzbcNJV5Y8ESc_LXiGQrkXsYa7FZBt5LCbdw-q5eQ4RkiLTRCxGxcFj92oHV3z7-GIaamv_gGF0mlY)
 #'
