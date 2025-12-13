@@ -170,7 +170,6 @@ class Pargs:
         
         Arguments:
             names   - list of valid subcommands to search against
-            exit_on_error   - should the application being finished in case of errors [default: True]
         
         Returns: subcommand name if valid or empty string.
         """
@@ -282,12 +281,9 @@ class Pargs:
             else:
                 res.append(default)
         return(res)
-    def help(self,exit_on=True):
+    def help(self):
         """
         Display full help page.
-        
-        Arguments:
-            exit_on   - should the application being finished afterwards [default: True]            
         """
         return(self.doc.format(self.argv[0]))
         
