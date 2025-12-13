@@ -26,6 +26,11 @@ test:
 	python3 pargs.py -h | grep -q Arguments: && echo OK || echo Fail
 	python3 pargs.py -i 12 | grep -q "Valid subcommands are" && echo OK || echo Fail
 	python3 pargs.py dummy -i 12 | grep -q "Wrong subcommand 'dummy'" && echo OK || echo Fail
+	python3 pargs.py run -i 15 test.txt | grep -q "x: 15" && echo OK || echo Fail	
 	python3 pargs.py run -i 12 | grep -q "Missing <INFILE> argument" && echo OK || echo Fail
 	python3 pargs.py run -i 12 test.txt | grep -q "infile: 'test.txt' - outfile: '-'" && echo OK || echo Fail
+	python3 pargs.py run -f 33.5 test.txt | grep -q "f: 33.500" && echo OK || echo Fail	
+	python3 pargs.py run -i 12 test.txt out.txt | grep -q "infile: 'test.txt' - outfile: 'out.txt'" && echo OK || echo Fail	
 
+test-all:
+	@make test | grep -v python3 | grep -v make | uniq -c

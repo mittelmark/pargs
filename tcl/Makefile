@@ -25,3 +25,15 @@ docu:   ## create HTML doc
 
 test:   ## test pargs package
 	tclsh pargs.test
+test-app:
+	tclsh pargs.tcl | grep -q Usage: && echo OK || echo Fail
+	tclsh pargs.tcl -h | grep -q Arguments: && echo OK || echo Fail
+	tclsh pargs.tcl -i 12 | grep -q "known subcommands are" && echo OK || echo Fail
+	tclsh pargs.tcl dummy -i 12 | grep -q "Unkown subcommand 'dummy'" && echo OK || echo Fail
+	tclsh pargs.tcl run -i 15 test.txt | grep -q "i is 15" && echo OK || echo Fail	
+	tclsh pargs.tcl run -i 12 | grep -q "Missing <INFILE> argument" && echo OK || echo Fail
+	tclsh pargs.tcl run -i 12 test.txt | grep -q "infile: test.txt - outfile: -" && echo OK || echo Fail
+	tclsh pargs.tcl run -i 12 test.txt out.txt | grep -q "infile: test.txt - outfile: out.txt" && echo OK || echo Fail	
+
+test-all:
+	@make test-app | grep -v tclsh | grep -v make | uniq -c

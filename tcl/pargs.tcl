@@ -147,7 +147,7 @@ oo::class create Pargs {
             set options(-argv) [lrange $options(-argv) 1 end]
             return $cmd
         } else {
-            my error "Error: Unkown subcommand, known subcommands are: '[join $names ',']!"
+            my error "Error: Unkown subcommand '[lindex $options(-argv) 0]', known subcommands are: '[join $names ',']!"
             return ""
         }
     }
@@ -327,12 +327,13 @@ oo::class create Pargs {
 
 set DOC {
     Usage: pargs.tcl (-h|--help|-V,--version)
+              ( run | stop )
               <INFILE> [OUTFILE]
               
     Options:
         -h,--help       display this help page
         -V,--version    display the application version
-        -i,--int        some integer, default: 10
+        -i,--int   INT  some integer, default: 10
         
     Positional Arguments:
          INFILE          input file to be parsed
@@ -351,6 +352,8 @@ if {[info exists argv0] && $argv0 eq [info script]} {
     if {[$pargs parse bool -V --version false]} {
         puts [$pargs version]; exit
     }
+    set cmd [$pargs subcommand [list name run]]
+    if {$cmd eq ""} { exit }
     set i [$pargs parse int -i --int 12]
     if {![$pargs check-options]} { exit }
     set infile [$pargs positional]
