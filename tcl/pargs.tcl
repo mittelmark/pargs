@@ -416,6 +416,7 @@ if {[info exists argv0] && $argv0 eq [info script]} {
 #'
 #' Here set of links which are implementing other command line parsers:
 #'
+#' - [pargs.py](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/python/pargs.html)
 #' - [cmdline](https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/cmdline/cmdline.md)
 #' - [argparse](https://github.com/georgtree/argparse)
 #' - [argvparse](https://wiki.tcl-lang.org/page/dgtools%3A%3Aargvparse)
