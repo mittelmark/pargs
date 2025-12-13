@@ -3,17 +3,15 @@
 #' title: pargs 0.0.1
 #' author: Detlef Groth, University of Potsdam, Germany
 #' date: 2025-12-13
-#' css: mndoc.css
-#' style: |
-#'    @import url('https://fonts.bunny.net/css?family=Andika&display=swap'); 
-#'    @import url('https://fonts.bunny.net/css?family=Ubuntu+Mono&display=swap');
-#'    body { font-family: Andika, sans-serif ; }
-#'    pre, code { font-family: "Ubuntu Mono", monospaced ; }
 #' ---
 #' 
 #' ## NAME
 #'
 #' **pargs**  - Tcl package for simple command line parsing.
+
+#' ## TABLE OF CONTENTS
+#'
+#' `include pargs.toc`
 #'
 #' ## SYNOPSIS
 #'
@@ -40,54 +38,9 @@
 #' the presence of unsupported options should be done and thereafter the parsing of positional command line options. See the following code.
 #' for an example:
 #' 
-#' ## EXAMPLE
-#' 
-#' ```
-#' set DOC {
-#'    Usage: pargs.tcl (-h|--help|-V,--version)
-#'              <INFILE> [OUTFILE]
-#'              
-#'    Options:
-#'        -h,--help       display this help page
-#'        -V,--version    display the application version
-#'        -i,--int        some integer, default: 10
-        
-#'    Positional Arguments:
-#'         INFILE          input file to be parsed
-#'         [OUTFILE]       outfile [default: '-']
-#'}
-#'
-#'
-#'if {[info exists argv0] && $argv0 eq [info script]} {
-#'    set pargs [Pargs new -doc $DOC -argv $argv -version [package present pargs] -color true]
-#'    if {[llength $argv] == 0} {
-#'        $pargs usage
-#'    }
-#'    if {[$pargs parse bool -h --help false]} {
-#'        $pargs help
-#'    }
-#'    if {[$pargs parse bool -V --version false]} {
-#'        $pargs version; exit
-#'    }
-#'    
-#'    set i [$pargs parse int -i --int 12]
-#'    $pargs check-options
-#'    set infile [$pargs positional]
-#'    if {$infile eq "-"} {
-#'        $pargs error "Error: Missing <INFILE> argument!"
-#'        $pargs usage
-#'    }
-#'    set outfile [$pargs positional]
-#'    puts "Hi! -i is $i"
-#'    puts "infile: $infile - outfile: $outfile"
-#'}
-#'```
-#' 
 #' ## API
-#'
 #' ![](https://kroki.io/plantuml/svg/eNptkFFuwzAIht9zCqtPXpZcoFKlHmFXoA51rGITgd2pmnb3uZtrtdJ44_-AHzhqBskl0uAIVM0HiFfzNZga72YcecuBk46j2RsQgdsv-aPzwq7KmiUk_6zXGdcKKGh-lq8oWof92-KYWCo5MRNCav4JP-19obeWuxXdZW472a5yOgdfBF9qUYTFRvUPYUXaes8GomjzbcNJV5Y8ESc_LXiGQrkXsYa7FZBt5LCbdw-q5eQ4RkiLTRCxGxcFj92oHV3z7-GIaamv_gGF0mlY)
 #'
-#' ### class Pargs
 #' 
 ##############################################################################
 package provide pargs 0.0.1
@@ -95,6 +48,8 @@ package require Tcl 8.6-
 
 oo::class create Pargs {
     variable options
+    #'
+    #' ### Constructor
     #'
     #' **Pargs new args** 
     #'
@@ -107,6 +62,12 @@ oo::class create Pargs {
     #'   - _-color_ - should error messages being displayed with ANSI red [default: true]
     #'
     #' > Returns: Pargs object
+    #'
+    #' > Example:
+    #'
+    #' > ```
+    #' set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
+    #' > ```
     constructor {args} {
         # default options
         my variable options
@@ -114,7 +75,6 @@ oo::class create Pargs {
         set options(-argv) [list]
         set options(-version) "0.0.0"
         set options(-color) true ; # colored error message
-        set options(-exit) true  ; # on error
         my configure {*}$args
         set nargs [list]
         foreach arg $options(-argv) {
@@ -127,6 +87,8 @@ oo::class create Pargs {
         }
         set options(-argv) $nargs
     }
+    #'
+    #' ### Methods
     #'
     #' _cmd_  **configure** _args_
     #'
@@ -158,7 +120,16 @@ oo::class create Pargs {
     #' _cmd_  **subcommand** _names_
     #'
     #' > Looks if the first argument is one of the subcommands given in names.
-    #' If this is the case returns the command name.
+    #' If this is the case returns the command name otherwise an empty string.
+    #'
+    #' > Example:
+    #'
+    #' > ```
+    #' set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
+    #' set cmd [$pargs subcommand [list run stop]]
+    #' if {$cmd eq ""} { exit }
+    #' > ```
+    
     method subcommand {names} {
         my variable options 
         set cmd [lindex $options(-argv) 0]
@@ -167,9 +138,6 @@ oo::class create Pargs {
             return $cmd
         } else {
             my error "Error: Unkown subcommand, known subcommands are: '[join $names ',']!"
-            if {$options(-exit)} {
-                exit
-            }
             return ""
         }
     }
@@ -184,7 +152,10 @@ oo::class create Pargs {
     #' 
     #' > ```
     #' set h [$pargs parse bool -h --help false]
-    #' if {$h} { $pargs help }
+    #' if {$h} { puts [$pargs help] ; exit }
+    #' set i [$pargs parse int    -i --int   20]
+    #' set f [$pargs parse float  -f --float 3.14]
+    #' set s [$pargs parse string -s --simple greeting]    
     #' > ```
     method parse {type ashort along {default ""}} {
         set idx [lsearch -exact $options(-argv) $ashort]
@@ -201,16 +172,10 @@ oo::class create Pargs {
                     return true
                 } else {
                     my error "Error: Given default for '$ashort' or '$along' is not boolean!"
-                    if {$options(-exit)} {
-                        exit
-                    }
                 } 
             } elseif {$type in [list int float string]} {
                 if {[llength $options(-argv)] < $idx} {
                     my error "Error: Mising value for option '$ashort' or '$along'!"
-                    if {$options(-exit)} {
-                        exit
-                    }
                 } else {
                     set val [lindex $options(-argv) [expr {$idx+1}]]
                     set options(-argv) [lreplace $options(-argv) $idx $idx]
@@ -220,18 +185,12 @@ oo::class create Pargs {
                             return $val
                         } else {
                             my error "Error: given value for option '$ashort' or '$along' is not an integer!"
-                            if {$options(-exit)} {
-                                exit
-                            }
                         }
                     } elseif {$type eq "float"} {
                         if {[regexp {^[\\.0-9]+$} $val]} {
                             return $val
                         } else {
                             my error "Error: given value for option '$ashort' or '$along' is not a float!"
-                            if {$options(-exit)} {
-                                exit
-                            }
                         }
                     } else {
                         return $val
@@ -247,7 +206,8 @@ oo::class create Pargs {
     #'
     #' > After parsing all flags and options checks for the presence of
     #' options which were not extracted yet., if the exists shows an 
-    #' error message and exits the application.
+    #' error message and exits the application. Returns true if all is OK
+    #' and false if there is an error within the options.
     #'
     method check-options {} {
         my variable options
@@ -258,8 +218,10 @@ oo::class create Pargs {
                 set e true
             }
         }
-        if {$e && $options(-exit)} {
-            exit
+        if {$e} {
+            return false
+        } else {
+            return true
         }
     }
     #'
@@ -290,37 +252,48 @@ oo::class create Pargs {
         }
     }
     #'
+    #' _cmd_ **help**
+    #'
+    #' > Returns the help lines.
+    #'
+    #' >  Example:
+    #' 
+    #' > ```
+    #' set h [$pargs parse bool -h --help false]
+    #' if {$h} { $pargs help ; exit }
+    #' > ```
+    #'
+    method help {} {
+        my variable options
+        
+        return [string trim $options(-doc)]
+    }
+    #'
     #' _cmd_ **usage**
     #'
-    #' > Shows the usage line(s) and exits the application if options(-exit) was
-    #' set to true.
+    #' > Returns the usage line, so the lines from the documentation until the first empty line.
     #'
+    #' >  Example:
+    #' 
+    #' > ```
+    #' if {[llength $argv] == 0} {
+    #'   puts [$pargs usage] 
+    #'   exit 
+    #' }
+    #' > ```
+    
     method usage {} {
         my variable options
         set x 0
+        set res ""
         foreach line [split [string trim $options(-doc)] "\n"] {
             if {[incr x] > 2 && [regexp {^\s*$} $line]} {
                 break
             } else {
-                puts $line
+                append res "$line\n"
             }
         }
-        if {$options(-exit)} {
-            exit
-        }
-    }
-    #'
-    #' _cmd_ **help**
-    #'
-    #' > Shows the help lines and exits the application if options(-exit) was
-    #' set to true.
-    #'
-    method help {} {
-        my variable options
-        puts [string trim $options(-doc)]
-        if {$options(-exit)} {
-            exit
-        }
+        return $res
     }
     #'
     #' _cmd_ **version**
@@ -330,7 +303,11 @@ oo::class create Pargs {
     #' > Example:
     #'
     #' > ```
-    #' puts [$pargs version]
+    #' set v [$pargs parse bool -V --version false]
+    #' if {$v} {
+    #'    puts [$pargs version]
+    #'    exit
+    #' }
     #' > ```
     method version {} {
         my variable options
@@ -356,31 +333,81 @@ set DOC {
 if {[info exists argv0] && $argv0 eq [info script]} {
     set pargs [Pargs new -doc $DOC -argv $argv -version [package present pargs] -color true]
     if {[llength $argv] == 0} {
-        $pargs usage
+        puts [$pargs usage] ; exit
     }
     if {[$pargs parse bool -h --help false]} {
-        $pargs help
+        puts [$pargs help] ; exit
     }
     if {[$pargs parse bool -V --version false]} {
-        $pargs version; exit
+        puts [$pargs version]; exit
     }
-    
     set i [$pargs parse int -i --int 12]
-    $pargs check-options
+    if {![$pargs check-options]} { exit }
     set infile [$pargs positional]
     if {$infile eq "-"} {
         $pargs error "Error: Missing <INFILE> argument!"
-        $pargs usage
+        puts [$pargs usage]; exit
     }
     set outfile [$pargs positional]
     puts "Hi! -i is $i"
     puts "infile: $infile - outfile: $outfile"
 }
     
-
+#'
+#' ## EXAMPLE
+#' 
+#' ```
+#' set DOC {
+#'    Usage: pargs.tcl (-h|--help|-V,--version)
+#'              <INFILE> [OUTFILE]
+#'              
+#'    Options:
+#'        -h,--help       display this help page
+#'        -V,--version    display the application version
+#'        -i,--int        some integer, default: 10
+        
+#'    Positional Arguments:
+#'         INFILE          input file to be parsed
+#'         [OUTFILE]       outfile [default: '-']
+#' }
+#'
+#'
+#' if {[info exists argv0] && $argv0 eq [info script]} {
+#'    set pargs [Pargs new -doc $DOC -argv $argv -version [package present pargs] -color true]
+#'    if {[llength $argv] == 0} {
+#'        puts [$pargs usage] ; exit
+#'    }
+#'    if {[$pargs parse bool -h --help false]} {
+#'        puts [$pargs help] ; exit
+#'    }
+#'    if {[$pargs parse bool -V --version false]} {
+#'        puts [$pargs version]; exit
+#'    }
+#'    set i [$pargs parse int -i --int 12]
+#'    if {![$pargs check-options]} { exit }
+#'    ## mandatory positional argument
+#'    set infile [$pargs positional]
+#'    if {$infile eq "-"} {
+#'        $pargs error "Error: Missing <INFILE> argument!"
+#'        puts [$pargs usage]; exit
+#'    }
+#'    ## optional positional argument - default to '-' 
+#'    ## which is usually a placeholder for stdout
+#'    set outfile [$pargs positional]
+#'    puts "Hi! -i is $i"
+#'    puts "infile: $infile - outfile: $outfile"
+#' }
+#' ```
+#'
 #' ## SEE ALSO
 #'
+#' Here set of links which are implementing other command line parsers:
 #'
+#' - [cmdline](https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/cmdline/cmdline.md)
+#' - [argparse](https://github.com/georgtree/argparse)
+#' - [argvparse](https://wiki.tcl-lang.org/page/dgtools%3A%3Aargvparse)
+#' 
+
 #' ## CHANGES
 #'
 #' - 2025-12-13: Version 0.0.1 initial setup

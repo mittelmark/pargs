@@ -17,10 +17,6 @@
 
 
 <style>
-@import url('https://fonts.bunny.net/css?family=Andika&display=swap'); 
-@import url('https://fonts.bunny.net/css?family=Ubuntu+Mono&display=swap');
-body { font-family: Andika, sans-serif ; }
-pre, code { font-family: "Ubuntu Mono", monospaced ; }
 </style>
     
 </head>
@@ -35,11 +31,36 @@ pre, code { font-family: "Ubuntu Mono", monospaced ; }
 <h2 class="date">2025-12-13</h2>
     </div>
 
-<h2>NAME</h2>
+<p><a name="name"> </a></p><h2>NAME</h2>
 
-<p><strong>pargs</strong>  - Tcl package for simple command line parsing.</p>
+<p><strong>pargs</strong>  - Tcl package for simple command line parsing.
+<a name="tableofcontents"> </a></p><h2>TABLE OF CONTENTS</h2>
 
-<h2>SYNOPSIS</h2>
+<div class='toc'>
+
+<h3>Table of Contents</h3>
+
+<ul>
+<li><a href="#name">NAME</a></li>
+<li><a href="#tableofcontents">TABLE OF CONTENTS</a></li>
+<li><a href="#synopsis">SYNOPSIS</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#api">API</a>
+<ul>
+<li><a href="#constructor">Constructor</a></li>
+<li><a href="#methods">Methods</a></li></ul>
+
+</li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#seealso">SEE ALSO</a></li>
+<li><a href="#changes">CHANGES</a></li>
+<li><a href="#author">AUTHOR</a></li>
+<li><a href="#licenseandcopyright">LICENSE AND COPYRIGHT</a>
+</li></ul>
+
+<p></div></p>
+
+<p><a name="synopsis"> </a></p><h2>SYNOPSIS</h2>
 
 <pre class='code'><code>package require Tcl 8.6-
 package require pargs
@@ -52,7 +73,7 @@ $pargs check-options
 $pargs positional
 $pargs error</code></pre>
 
-<h2>DESCRIPTION</h2>
+<p><a name="description"> </a></p><h2>DESCRIPTION</h2>
 
 <p><strong>pargs</strong> - can be seen as a simple replacement of other command line parsers.
 The user still has to declare an help page usually with raw text where the usage line
@@ -62,51 +83,9 @@ a check for the presence of options, after all supported options are checked,
 the presence of unsupported options should be done and thereafter the parsing of positional command line options. See the following code.
 for an example:</p>
 
-<h2>EXAMPLE</h2>
+<p><a name="api"> </a></p><h2>API</h2><p><img src="https://kroki.io/plantuml/svg/eNptkFFuwzAIht9zCqtPXpZcoFKlHmFXoA51rGITgd2pmnb3uZtrtdJ44_-AHzhqBskl0uAIVM0HiFfzNZga72YcecuBk46j2RsQgdsv-aPzwq7KmiUk_6zXGdcKKGh-lq8oWof92-KYWCo5MRNCav4JP-19obeWuxXdZW472a5yOgdfBF9qUYTFRvUPYUXaes8GomjzbcNJV5Y8ESc_LXiGQrkXsYa7FZBt5LCbdw-q5eQ4RkiLTRCxGxcFj92oHV3z7-GIaamv_gGF0mlY"></img></p>
 
-<pre class='code'><code>set DOC {
-   Usage: pargs.tcl (-h|--help|-V,--version)
-             &lt;INFILE&gt; [OUTFILE]
-             
-   Options:
-       -h,--help       display this help page
-       -V,--version    display the application version
-       -i,--int        some integer, default: 10
-   Positional Arguments:
-        INFILE          input file to be parsed
-        [OUTFILE]       outfile [default: '-']
-}
-
-
-if {[info exists argv0] &amp;&amp; $argv0 eq [info script]} {
-   set pargs [Pargs new -doc $DOC -argv $argv -version [package present pargs] -color true]
-   if {[llength $argv] == 0} {
-       $pargs usage
-   }
-   if {[$pargs parse bool -h --help false]} {
-       $pargs help
-   }
-   if {[$pargs parse bool -V --version false]} {
-       $pargs version; exit
-   }
-   
-   set i [$pargs parse int -i --int 12]
-   $pargs check-options
-   set infile [$pargs positional]
-   if {$infile eq &quot;-&quot;} {
-       $pargs error &quot;Error: Missing &lt;INFILE&gt; argument!&quot;
-       $pargs usage
-   }
-   set outfile [$pargs positional]
-   puts &quot;Hi! -i is $i&quot;
-   puts &quot;infile: $infile - outfile: $outfile&quot;
-}</code></pre>
-
-<h2>API</h2>
-
-<p><img src="https://kroki.io/plantuml/svg/eNptkFFuwzAIht9zCqtPXpZcoFKlHmFXoA51rGITgd2pmnb3uZtrtdJ44_-AHzhqBskl0uAIVM0HiFfzNZga72YcecuBk46j2RsQgdsv-aPzwq7KmiUk_6zXGdcKKGh-lq8oWof92-KYWCo5MRNCav4JP-19obeWuxXdZW472a5yOgdfBF9qUYTFRvUPYUXaes8GomjzbcNJV5Y8ESc_LXiGQrkXsYa7FZBt5LCbdw-q5eQ4RkiLTRCxGxcFj92oHV3z7-GIaamv_gGF0mlY"></img></p>
-
-<h3>class Pargs</h3>
+<p><a name="constructor"> </a></p><h3>Constructor</h3>
 
 <p><strong>Pargs new args</strong></p>
 
@@ -122,7 +101,13 @@ if {[info exists argv0] &amp;&amp; $argv0 eq [info script]} {
 </li></ul>
 
 <p>Returns: Pargs object</p>
+
+<p>Example:</p>
+
+<pre class='code'><code>set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]</code></pre>
 </blockquote>
+
+<p><a name="methods"> </a></p><h3>Methods</h3>
 
 <p><em>cmd</em>  <strong>configure</strong> <em>args</em></p>
 
@@ -143,7 +128,13 @@ set to true, errors are shown in red foreground color.</p>
 
 <blockquote>
 <p>Looks if the first argument is one of the subcommands given in names.
-If this is the case returns the command name.</p>
+If this is the case returns the command name otherwise an empty string.</p>
+
+<p>Example:</p>
+
+<pre class='code'><code>set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
+set cmd [$pargs subcommand [list run stop]]
+if {$cmd eq &quot;&quot;} { exit }</code></pre>
 </blockquote>
 
 <p><em>cmd</em> <strong> parse</strong> <em>type ashort along default</em></p>
@@ -156,7 +147,10 @@ will be used instead.</p>
 <p>Example:</p>
 
 <pre class='code'><code>set h [$pargs parse bool -h --help false]
-if {$h} { $pargs help }</code></pre>
+if {$h} { puts [$pargs help] ; exit }
+set i [$pargs parse int    -i --int   20]
+set f [$pargs parse float  -f --float 3.14]
+set s [$pargs parse string -s --simple greeting]    </code></pre>
 </blockquote>
 
 <p><em>cmd</em> <strong>check-options</strong></p>
@@ -164,7 +158,8 @@ if {$h} { $pargs help }</code></pre>
 <blockquote>
 <p>After parsing all flags and options checks for the presence of
 options which were not extracted yet., if the exists shows an 
-error message and exits the application.</p>
+error message and exits the application. Returns true if all is OK
+and false if there is an error within the options.</p>
 </blockquote>
 
 <p><em>cmd</em> <strong>positional</strong> <em>default &quot;-&quot;</em></p>
@@ -184,18 +179,28 @@ if {$infile eq &quot;-&quot;} {
 }</code></pre>
 </blockquote>
 
-<p><em>cmd</em> <strong>usage</strong></p>
-
-<blockquote>
-<p>Shows the usage line(s) and exits the application if options(-exit) was
-set to true.</p>
-</blockquote>
-
 <p><em>cmd</em> <strong>help</strong></p>
 
 <blockquote>
-<p>Shows the help lines and exits the application if options(-exit) was
-set to true.</p>
+<p>Returns the help lines.</p>
+
+<p>Example:</p>
+
+<pre class='code'><code>set h [$pargs parse bool -h --help false]
+if {$h} { $pargs help ; exit }</code></pre>
+</blockquote>
+
+<p><em>cmd</em> <strong>usage</strong></p>
+
+<blockquote>
+<p>Returns the usage line, so the lines from the documentation until the first empty line.</p>
+
+<p>Example:</p>
+
+<pre class='code'><code>if {[llength $argv] == 0} {
+  puts [$pargs usage] 
+  exit 
+}</code></pre>
 </blockquote>
 
 <p><em>cmd</em> <strong>version</strong></p>
@@ -205,20 +210,76 @@ set to true.</p>
 
 <p>Example:</p>
 
-<pre class='code'><code>puts [$pargs version]</code></pre><h2>SEE ALSO</h2>
+<pre class='code'><code>set v [$pargs parse bool -V --version false]
+if {$v} {
+   puts [$pargs version]
+   exit
+}</code></pre>
 </blockquote>
 
-<h2>CHANGES</h2>
+<p><a name="example"> </a></p><h2>EXAMPLE</h2>
+
+<pre class='code'><code>set DOC {
+   Usage: pargs.tcl (-h|--help|-V,--version)
+             &lt;INFILE&gt; [OUTFILE]
+             
+   Options:
+       -h,--help       display this help page
+       -V,--version    display the application version
+       -i,--int        some integer, default: 10
+   Positional Arguments:
+        INFILE          input file to be parsed
+        [OUTFILE]       outfile [default: '-']
+}
+
+
+if {[info exists argv0] &amp;&amp; $argv0 eq [info script]} {
+   set pargs [Pargs new -doc $DOC -argv $argv -version [package present pargs] -color true]
+   if {[llength $argv] == 0} {
+       puts [$pargs usage] ; exit
+   }
+   if {[$pargs parse bool -h --help false]} {
+       puts [$pargs help] ; exit
+   }
+   if {[$pargs parse bool -V --version false]} {
+       puts [$pargs version]; exit
+   }
+   set i [$pargs parse int -i --int 12]
+   if {![$pargs check-options]} { exit }
+   ## mandatory positional argument
+   set infile [$pargs positional]
+   if {$infile eq &quot;-&quot;} {
+       $pargs error &quot;Error: Missing &lt;INFILE&gt; argument!&quot;
+       puts [$pargs usage]; exit
+   }
+   ## optional positional argument - default to '-' 
+   ## which is usually a placeholder for stdout
+   set outfile [$pargs positional]
+   puts &quot;Hi! -i is $i&quot;
+   puts &quot;infile: $infile - outfile: $outfile&quot;
+}</code></pre>
+
+<p><a name="seealso"> </a></p><h2>SEE ALSO</h2>
+
+<p>Here set of links which are implementing other command line parsers:</p>
+
+<ul>
+<li><a href="https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/cmdline/cmdline.md">cmdline</a></li>
+<li><a href="https://github.com/georgtree/argparse">argparse</a></li>
+<li><a href="https://wiki.tcl-lang.org/page/dgtools%3A%3Aargvparse">argvparse</a>
+</li></ul>
+
+<p><a name="changes"> </a></p><h2>CHANGES</h2>
 
 <ul>
 <li>2025-12-13: Version 0.0.1 initial setup
 </li></ul>
 
-<h2>AUTHOR</h2>
+<p><a name="author"> </a></p><h2>AUTHOR</h2>
 
 <p>The <strong>pargs</strong> package was written by Detlef Groth, University of Potdam, Germany.</p>
 
-<h2>LICENSE AND COPYRIGHT</h2>
+<p><a name="licenseandcopyright"> </a></p><h2>LICENSE AND COPYRIGHT</h2>
 
 <p>pargs command line argument parser for Tcl/Tk version 0.0.1</p>
 
