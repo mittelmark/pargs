@@ -31,10 +31,33 @@
 <h2 class="date">2025-12-13</h2>
     </div>
 
-<h2>NAME</h2>
+<p><a name="name"> </a></p><h2>NAME</h2>
 
 <p><strong>pargs.py</strong> - This module provides a simple class to allow command line argument parsing
 for Python applications. Supporting the following features:</p>
+
+<div class='toc'>
+
+<h3>Table of Contents</h3>
+
+<ul>
+<li><a href="#name">NAME</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#classdocumentation">Class Documentation</a></li>
+<li><a href="#methods">Methods</a></li>
+<li><a href="#todo">TODO<br/></a></li>
+<li><a href="#seealso">SEE ALSO</a></li>
+<li><a href="#changes">CHANGES</a></li>
+<li><a href="#author">AUTHOR</a></li>
+<li><a href="#licenseandcopyright">LICENSE AND COPYRIGHT</a>
+</li></ul>
+
+<p></div></p>
+
+<p><a name="description"> </a></p><h2>DESCRIPTION</h2>
+
+<p>The pargs module supports parsing the following types of command line options.</p>
 
 <ul>
 <li>long and short options</li>
@@ -59,7 +82,7 @@ for Python applications. Supporting the following features:</p>
 <li>positionals check (positional) - optional if you need that
 </li></ul>
 
-<p>Example:</p>
+<p><a name="example"> </a></p><h2>EXAMPLE</h2>
 
 <pre class='code'><code>'''Usage: app.py (-h | --help) 
         [ -V, --version, -v,--verbose -i INT -f FLOAT]
@@ -80,31 +103,34 @@ Arguments:
 __version__ = &quot;0.0.1&quot;
 import sys
 import pargs
-argv=sys.argv  ## just for demo
-parser = pargs.Pargs(__doc__,argv,__version__)
-if (len(argv)==1): 
-    print(pargs.usage()); sys.exit()
-if pargs.parse(&quot;bool&quot;,&quot;-h&quot;,&quot;--help&quot;,False): 
-    print(pargs.help()); sys.exit()
-if pargs.parse(&quot;bool&quot;,&quot;-V&quot;,&quot;--version&quot;,False): 
-    print(pargs.version()); sys.exit()
-c = pargs.subcommand([&quot;check&quot;,&quot;run&quot;,&quot;round&quot;])
-if c == None: sys.exit()
-v = pargs.parse(&quot;bool&quot;,&quot;-v&quot;,&quot;--verbose&quot;,False)
-x = pargs.parse(&quot;int&quot;,&quot;-i&quot;,&quot;--int&quot;,10)
-if x == None: sys.exit()
-f = pargs.parse(&quot;float&quot;,&quot;-f&quot;,&quot;--flt&quot;,10.2)
-if f == None: sys.exit()
-# check for wrong options    
-if not pargs.check(): sys.exit()
-infile,outfile=pargs.position(2)
-if infile == &quot;-&quot;: 
-    pargs.error(&quot;Missing &lt;INFILE&gt; argument!&quot;)
-    print(pargs.usage()); exit()
-print(&quot;c: %s &quot; % (c))           
-print(&quot;v: %s &quot; % (v))            
-print(&quot;x: %i - f: %.3f&quot; % (x,f))
-print(&quot;infile: '%s' - outfile: '%s'&quot; % (infile,outfile))</code></pre>
+if __name__ == &quot;__main__&quot;:
+    argv=sys.argv  ## just for demo
+    parser = pargs.Pargs(__doc__,argv,__version__)
+    if (len(argv)==1): 
+        print(pargs.usage()); sys.exit()
+    if pargs.parse(&quot;bool&quot;,&quot;-h&quot;,&quot;--help&quot;,False): 
+        print(pargs.help()); sys.exit()
+    if pargs.parse(&quot;bool&quot;,&quot;-V&quot;,&quot;--version&quot;,False): 
+        print(pargs.version()); sys.exit()
+    c = pargs.subcommand([&quot;check&quot;,&quot;run&quot;,&quot;round&quot;])
+    if c == None: sys.exit()
+    v = pargs.parse(&quot;bool&quot;,&quot;-v&quot;,&quot;--verbose&quot;,False)
+    x = pargs.parse(&quot;int&quot;,&quot;-i&quot;,&quot;--int&quot;,10)
+    if x == None: sys.exit()
+    f = pargs.parse(&quot;float&quot;,&quot;-f&quot;,&quot;--flt&quot;,10.2)
+    if f == None: sys.exit()
+    # check for wrong options    
+    if not pargs.check(): sys.exit()
+    infile,outfile=pargs.position(2)
+    if infile == &quot;-&quot;: 
+        pargs.error(&quot;Missing &lt;INFILE&gt; argument!&quot;)
+        print(pargs.usage()); exit()
+    print(&quot;c: %s &quot; % (c))           
+    print(&quot;v: %s &quot; % (v))            
+    print(&quot;x: %i - f: %.3f&quot; % (x,f))
+    print(&quot;infile: '%s' - outfile: '%s'&quot; % (infile,outfile))</code></pre>
+
+<p><a name="classdocumentation"> </a></p><h2>Class Documentation</h2>
 
 <p><strong>class Pargs</strong></p>
 
@@ -125,6 +151,8 @@ print(&quot;infile: '%s' - outfile: '%s'&quot; % (infile,outfile))</code></pre>
 
 
 </blockquote>
+
+<p><a name="methods"> </a></p><h2>Methods</h2>
 
 <p><strong>def error(self,msg)</strong></p>
 
@@ -215,7 +243,7 @@ so usually last.</p>
 
 <p>Display application version.</p>
 
-<h2>TODO<br/></h2>
+<p><a name="todo"> </a></p><h2>TODO<br/></h2>
 
 <ul>
 <li>subcommands (done)</li>
@@ -224,7 +252,7 @@ so usually last.</p>
 <li>str(type(t)) == &quot;&lt;class 'function'&gt;&quot;
 </li></ul>
 
-<h2>SEE ALSO</h2>
+<p><a name="seealso"> </a></p><h2>SEE ALSO</h2>
 
 <p>Here set of links which are implementing other command line parsers:</p>
 
@@ -234,18 +262,18 @@ so usually last.</p>
 <li><a href="https://github.com/docopt/docopt">docopt</a>
 </li></ul>
 
-<h2>CHANGES</h2>
+<p><a name="changes"> </a></p><h2>CHANGES</h2>
 
 <ul>
 <li>2025-12-13: Version 0.0.5 initial checkin into Gituup, removing exits from class</li>
 <li>2025-12-12: Version 0.0.4 initial use in lecture
 </li></ul>
 
-<h2>AUTHOR</h2>
+<p><a name="author"> </a></p><h2>AUTHOR</h2>
 
 <p>The <strong>pargs</strong> package was written by Detlef Groth, University of Potdam, Germany.</p>
 
-<h2>LICENSE AND COPYRIGHT</h2>
+<p><a name="licenseandcopyright"> </a></p><h2>LICENSE AND COPYRIGHT</h2>
 
 <p>pargs command line argument parser for Tcl/Tk version 0.0.1</p>
 

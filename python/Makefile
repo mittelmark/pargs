@@ -19,8 +19,8 @@ ARGS=
 tasks:  ## list all tasks
 	@grep -Eo '^[a-z0-9]+:.+' $(CURRENT_MAKEFILE) | sed -E 's/:\s+##/\t- /g'
 docu:   ## extract documentation
-	python3 docu.py pargs.py > pargs.md
-	python3 docu.py pargs.py > pargs.md
+	python3 docu.py pargs.py > pargs.Rmd
+	tmdoc pargs.Rmd - --toc true  | mndoc - pargs.html --css tmdoc.css
 test:
 	python3 pargs.py | grep -q Usage: && echo OK || echo Fail
 	python3 pargs.py -h | grep -q Arguments: && echo OK || echo Fail

@@ -8,6 +8,12 @@ Detlef Groth, University of Potsdam, Germany
 __pargs.py__ - This module provides a simple class to allow command line argument parsing
 for Python applications. Supporting the following features:
 
+`include pargs.toc`
+
+## DESCRIPTION
+
+The pargs module supports parsing the following types of command line options.
+
 - long and short options
 - boolean flags
 - key value options with defaults if argument was not given
@@ -27,7 +33,7 @@ The order fo parsing should be the following:
 - wrong option check (check)  - mandatory to check for invalid ones
 - positionals check (positional) - optional if you need that
 
-Example:
+## EXAMPLE
 
 ```
 '''Usage: app.py (-h | --help) 
@@ -49,32 +55,35 @@ Arguments:
 __version__ = "0.0.1"
 import sys
 import pargs
-argv=sys.argv  ## just for demo
-parser = pargs.Pargs(__doc__,argv,__version__)
-if (len(argv)==1): 
-    print(pargs.usage()); sys.exit()
-if pargs.parse("bool","-h","--help",False): 
-    print(pargs.help()); sys.exit()
-if pargs.parse("bool","-V","--version",False): 
-    print(pargs.version()); sys.exit()
-c = pargs.subcommand(["check","run","round"])
-if c == None: sys.exit()
-v = pargs.parse("bool","-v","--verbose",False)
-x = pargs.parse("int","-i","--int",10)
-if x == None: sys.exit()
-f = pargs.parse("float","-f","--flt",10.2)
-if f == None: sys.exit()
-# check for wrong options    
-if not pargs.check(): sys.exit()
-infile,outfile=pargs.position(2)
-if infile == "-": 
-    pargs.error("Missing <INFILE> argument!")
-    print(pargs.usage()); exit()
-print("c: %s " % (c))           
-print("v: %s " % (v))            
-print("x: %i - f: %.3f" % (x,f))
-print("infile: '%s' - outfile: '%s'" % (infile,outfile))
+if __name__ == "__main__":
+    argv=sys.argv  ## just for demo
+    parser = pargs.Pargs(__doc__,argv,__version__)
+    if (len(argv)==1): 
+        print(pargs.usage()); sys.exit()
+    if pargs.parse("bool","-h","--help",False): 
+        print(pargs.help()); sys.exit()
+    if pargs.parse("bool","-V","--version",False): 
+        print(pargs.version()); sys.exit()
+    c = pargs.subcommand(["check","run","round"])
+    if c == None: sys.exit()
+    v = pargs.parse("bool","-v","--verbose",False)
+    x = pargs.parse("int","-i","--int",10)
+    if x == None: sys.exit()
+    f = pargs.parse("float","-f","--flt",10.2)
+    if f == None: sys.exit()
+    # check for wrong options    
+    if not pargs.check(): sys.exit()
+    infile,outfile=pargs.position(2)
+    if infile == "-": 
+        pargs.error("Missing <INFILE> argument!")
+        print(pargs.usage()); exit()
+    print("c: %s " % (c))           
+    print("v: %s " % (v))            
+    print("x: %i - f: %.3f" % (x,f))
+    print("infile: '%s' - outfile: '%s'" % (infile,outfile))
 ```
+
+## Class Documentation
 
 """
 # Command line parsing
@@ -138,7 +147,9 @@ class Pargs:
         else:
             self.RED = ""
             self.DEF = ""
-
+        #' 
+        #' ## Methods
+        #'
     def error(self,msg):
         """
         Colored error message.
