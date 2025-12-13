@@ -36,6 +36,7 @@ The order fo parsing should be the following:
 ## EXAMPLE
 
 ```
+#!/usr/bin/env python3
 '''Usage: app.py (-h | --help) 
         [ -V, --version, -v,--verbose -i INT -f FLOAT]
          <INFILE> [<OUTFILE>]
@@ -55,8 +56,8 @@ Arguments:
 __version__ = "0.0.1"
 import sys
 import pargs
-if __name__ == "__main__":
-    argv=sys.argv  ## just for demo
+def main(argv)
+    ## just some demo code
     parser = pargs.Pargs(__doc__,argv,__version__)
     if (len(argv)==1): 
         print(pargs.usage()); sys.exit()
@@ -81,6 +82,10 @@ if __name__ == "__main__":
     print("v: %s " % (v))            
     print("x: %i - f: %.3f" % (x,f))
     print("infile: '%s' - outfile: '%s'" % (infile,outfile))
+
+if __name__ == "__main__":
+    main(sys.argv)
+
 ```
 
 ## Class Documentation

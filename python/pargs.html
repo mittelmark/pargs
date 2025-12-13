@@ -84,7 +84,8 @@ for Python applications. Supporting the following features:</p>
 
 <p><a name="example"> </a></p><h2>EXAMPLE</h2>
 
-<pre class='code'><code>'''Usage: app.py (-h | --help) 
+<pre class='code'><code>#!/usr/bin/env python3
+'''Usage: app.py (-h | --help) 
         [ -V, --version, -v,--verbose -i INT -f FLOAT]
          &lt;INFILE&gt; [&lt;OUTFILE&gt;]
          
@@ -103,8 +104,8 @@ Arguments:
 __version__ = &quot;0.0.1&quot;
 import sys
 import pargs
-if __name__ == &quot;__main__&quot;:
-    argv=sys.argv  ## just for demo
+def main(argv)
+    ## just some demo code
     parser = pargs.Pargs(__doc__,argv,__version__)
     if (len(argv)==1): 
         print(pargs.usage()); sys.exit()
@@ -128,7 +129,11 @@ if __name__ == &quot;__main__&quot;:
     print(&quot;c: %s &quot; % (c))           
     print(&quot;v: %s &quot; % (v))            
     print(&quot;x: %i - f: %.3f&quot; % (x,f))
-    print(&quot;infile: '%s' - outfile: '%s'&quot; % (infile,outfile))</code></pre>
+    print(&quot;infile: '%s' - outfile: '%s'&quot; % (infile,outfile))
+
+if __name__ == &quot;__main__&quot;:
+    main(sys.argv)
+</code></pre>
 
 <p><a name="classdocumentation"> </a></p><h2>Class Documentation</h2>
 
