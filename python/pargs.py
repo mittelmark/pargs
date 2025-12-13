@@ -6,7 +6,7 @@ Detlef Groth, University of Potsdam, Germany
 ## NAME
 
 __pargs.py__ - This module provides a simple class to allow command line argument parsing
-for Python applications. Supporting the following features:
+for Python applications.
 
 `include pargs.toc`
 
