@@ -46,10 +46,10 @@ for R applications.</p>
 <li><a href="#example">EXAMPLE</a></li>
 <li><a href="#classdocumentation">Class Documentation</a>
 <ul>
-<li><a href="#constructor">Constructor</a></li></ul>
+<li><a href="#constructor">Constructor</a></li>
+<li><a href="#methods">Methods</a></li></ul>
 
 </li>
-<li><a href="#methods">Methods</a></li>
 <li><a href="#todo">TODO<br/></a></li>
 <li><a href="#seealso">SEE ALSO</a></li>
 <li><a href="#changes">CHANGES</a></li>
@@ -147,10 +147,7 @@ if (sys.nframe() == 0L &amp;&amp; !interactive()) {
 
 <p><a name="classdocumentation"> </a></p><h2>Class Documentation</h2>
 
-<ul>
-<li>check for a subcommand if necessary
-<strong>pargs</strong> - Poor students argument parser. 
-</li></ul>
+<p><strong>pargs</strong> - Poor students argument parser.</p>
 
 <p><a name="constructor"> </a></p><h3>Constructor</h3>
 
@@ -170,7 +167,19 @@ if (sys.nframe() == 0L &amp;&amp; !interactive()) {
 
 </blockquote>
 
-<p><a name="methods"> </a></p><h2>Methods</h2>
+<p><a name="methods"> </a></p><h3>Methods</h3>
+
+<p><strong>pargs$check()</strong></p>
+
+<p>Check for any not supported option present in argv.
+Should be used only after the parse method. Returns TRUE
+if the checkwas succesfull, and False if not.</p>
+
+<blockquote>
+<p>Arguments: None</p>
+
+<p>Returns: FALSE if there was an error, and TRUE if there was no error.</p>
+</blockquote>
 
 <p><strong>pargs$error(msg)</strong></p>
 
@@ -185,18 +194,14 @@ if (sys.nframe() == 0L &amp;&amp; !interactive()) {
 
 </blockquote>
 
-<p><strong>pargs$subcommand(names)</strong></p>
+<p><strong>pargs$help()</strong></p>
 
-<p>Check first argument for a valid subcommand.</p>
+<p>Display full help page.</p>
 
 <blockquote>
-<p>Arguments:</p>
+<p>Arguments: None</p>
 
-<ul>
-<li>names - list of valid subcommands to search against
-</li></ul>
-
-<p>Returns: subcommand name if valid or NULL if is invalid.</p>
+<p>Returns: the help page as a string</p>
 </blockquote>
 
 <p><strong>pargs$parse(self,type, ashort, along,default=NULL)</strong></p>
@@ -217,18 +222,6 @@ the boolean type is handeled as a flag and expects no value</li>
 <p>Returns: the parsed value or if not given on the command line the default value</p>
 </blockquote>
 
-<p><strong>pargs$check()</strong></p>
-
-<p>Check for any not supported option present in argv.
-Should be used only after the parse method. Returns TRUE
-if the checkwas succesfull, and False if not.</p>
-
-<blockquote>
-<p>Arguments: None</p>
-
-<p>Returns: FALSE if there was an error, and TRUE if there was no error.</p>
-</blockquote>
-
 <p><strong>pargs$position(default=&quot;-&quot;)</strong></p>
 
 <p>Check for positional arguments.
@@ -245,19 +238,23 @@ so usually last.</p>
 <p>Returns: the value given on the command line or the default if there is no positional given</p>
 </blockquote>
 
-<p><strong>pargs$help()</strong></p>
+<p><strong>pargs$subcommand(names)</strong></p>
 
-<p>Display full help page.</p>
+<p>Check first argument for a valid subcommand.</p>
 
 <blockquote>
-<p>Arguments: None</p>
+<p>Arguments:</p>
 
-<p>Returns: the help page as a string</p>
+<ul>
+<li>names - list of valid subcommands to search against
+</li></ul>
+
+<p>Returns: subcommand name if valid or NULL if is invalid.</p>
 </blockquote>
 
 <p><strong>pargs$usage()</strong></p>
 
-<pre><code>    Display docu text until the first empty line within that text.</code></pre>
+<p>Display docu text until the first empty line within that text.</p>
 
 <blockquote>
 <p>Arguments: None</p>
@@ -287,6 +284,7 @@ so usually last.</p>
 <p>Here set of links which are implementing other command line parsers:</p>
 
 <ul>
+<li><a href="http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/python/pargs.html">pargs.py</a></li>
 <li><a href="http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/tcl/pargs.html">pargs.tcl</a></li>
 <li><a href="https://docs.python.org/3/library/optparse.html">optparse</a></li>
 <li><a href="https://docs.python.org/3/library/argparse.html">argparse</a></li>

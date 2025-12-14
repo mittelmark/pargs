@@ -98,13 +98,13 @@
 #' 
 #' ## Class Documentation
 #' 
-
+#
 # Command line parsing
 # Steps:
 # 
 # - look for number of arguments, if necessary call usage
 # - look for help flags - call help if necessary
-#'- check for a subcommand if necessary
+# - check for a subcommand if necessary
 # - declare and extract values of valid flags
 # - declare and extract values of options with key val or key=val syntax
 # - check for invalid flags, looping over all remaining arguments
@@ -176,7 +176,37 @@ pargs$new <- function (doc,argv,version="0.0.0",color=TRUE) {
 }
 
 #' 
-#' ## Methods
+#' ### Methods
+#'
+#'
+#' **pargs$check()**
+#'
+#' Check for any not supported option present in argv.
+#' Should be used only after the parse method. Returns TRUE
+#' if the checkwas succesfull, and False if not.
+#'
+#' > Arguments: None
+#' 
+#' > Returns: FALSE if there was an error, and TRUE if there was no error.
+
+pargs$check <- function () {
+    self=pargs
+    rhy = "--?\\w"
+    l = which(grepl("^--?\\w",self$argv))
+    e = FALSE
+    if (length(l)>0) {
+        for (i in l) {
+            self$error(sprintf("Error: Wrong argument: '%s'!", i))
+            e = TRUE
+        }
+    }
+    if (e) {
+        cat(self$usage())
+        return(FALSE)
+    } else {
+        return(TRUE)
+    }
+}
 #'
 #' **pargs$error(msg)**
 #'
@@ -188,6 +218,20 @@ pargs$new <- function (doc,argv,version="0.0.0",color=TRUE) {
 pargs$error <- function (msg) {
     self = pargs
     cat(sprintf("%s%s%s\n",self$RED,msg,self$DEF))
+}
+
+#'
+#' **pargs$help()**
+#'
+#' Display full help page.
+#'
+#' > Arguments: None
+#'
+#' > Returns: the help page as a string
+
+pargs$help <- function () {
+    self = pargs
+    return(self$doc)
 }
 
 pargs$pop <- function (index) {
@@ -209,28 +253,6 @@ pargs$pop <- function (index) {
     return(val)
 }
 
-#'
-#' **pargs$subcommand(names)**
-#'
-#' Check first argument for a valid subcommand.
-#'
-#' > Arguments:
-#'
-#' > - names - list of valid subcommands to search against
-#' 
-#' > Returns: subcommand name if valid or NULL if is invalid.
-
-pargs$subcommand <- function (names) {
-    self=pargs
-    if (self$argv[1] %in% names) {
-        return(self$pop(1))
-    } else {
-        self$error(sprintf("Error: Wrong subcommand '%s'!", self$argv[1]))
-        self$error(sprintf("Valid subcommands are '%s'!", paste(names,collapse="','")))
-        cat(self$usage())
-        return(NULL)
-    }
-}
 #'
 #' **pargs$parse(self,type, ashort, along,default=NULL)**
 #'
@@ -307,35 +329,6 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
     }
 }
 #'
-#' **pargs$check()**
-#'
-#' Check for any not supported option present in argv.
-#' Should be used only after the parse method. Returns TRUE
-#' if the checkwas succesfull, and False if not.
-#'
-#' > Arguments: None
-#' 
-#' > Returns: FALSE if there was an error, and TRUE if there was no error.
-
-pargs$check <- function () {
-    self=pargs
-    rhy = "--?\\w"
-    l = which(grepl("^--?\\w",self$argv))
-    e = FALSE
-    if (length(l)>0) {
-        for (i in l) {
-            self$error(sprintf("Error: Wrong argument: '%s'!", i))
-            e = TRUE
-        }
-    }
-    if (e) {
-        cat(self$usage())
-        return(FALSE)
-    } else {
-        return(TRUE)
-    }
-}
-#'
 #' **pargs$position(default="-")**
 #'
 #' Check for positional arguments.
@@ -358,22 +351,31 @@ pargs$position <- function (default="-") {
     }
 }
 #'
-#' **pargs$help()**
+#' **pargs$subcommand(names)**
 #'
-#' Display full help page.
+#' Check first argument for a valid subcommand.
 #'
-#' > Arguments: None
+#' > Arguments:
 #'
-#' > Returns: the help page as a string
+#' > - names - list of valid subcommands to search against
+#' 
+#' > Returns: subcommand name if valid or NULL if is invalid.
 
-pargs$help <- function () {
-    self = pargs
-    return(self$doc)
+pargs$subcommand <- function (names) {
+    self=pargs
+    if (self$argv[1] %in% names) {
+        return(self$pop(1))
+    } else {
+        self$error(sprintf("Error: Wrong subcommand '%s'!", self$argv[1]))
+        self$error(sprintf("Valid subcommands are '%s'!", paste(names,collapse="','")))
+        cat(self$usage())
+        return(NULL)
+    }
 }
 #'
 #' **pargs$usage()**
 #'
-#'         Display docu text until the first empty line within that text.
+#' Display docu text until the first empty line within that text.
 #'
 #' > Arguments: None
 #'
@@ -475,6 +477,7 @@ if (sys.nframe() == 0L && !interactive()) {
 #' Here set of links which are implementing other command line parsers:
 #'
 #'
+#' - [pargs.py](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/python/pargs.html)
 #' - [pargs.tcl](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/tcl/pargs.html)
 #' - [optparse](https://docs.python.org/3/library/optparse.html)
 #' - [argparse](https://docs.python.org/3/library/argparse.html)
