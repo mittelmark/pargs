@@ -202,11 +202,7 @@ class Pargs:
         elif type == "bool":
             return False
         elif idx > -1 and type in ["int","float"]:
-            if len(self.argv)<idx and None == "default":
-                self.error("Error: missing argument for %s,%s!" % (ashort,along))
-                print(self.usage())
-                return None
-            elif len(self.argv) == idx:
+            if len(self.argv)<=idx:
                 self.error("Error: missing argument for %s,%s!" % (ashort,along))
                 print(self.usage())
                 return(None)
@@ -235,14 +231,15 @@ class Pargs:
                 return(None)
                 
         elif idx > -1 and type == "string":
-            if len(self.argv)<idx+1 and None == default:
+            if len(self.argv)>idx+1:
+                val=self.argv.pop(idx+1)
+                self.argv.pop(idx)
+                return(val)
+            else:
                 self.error("Error: missing argument for %s,%s!" % (ashort,along))
                 print(self.usage())
                 return(None)
-            elif len(self.argv)<idx+1:
-                return(default)
-            else:
-                return(self.argv[idx+1])
+
         else:
             return(default)
     
@@ -308,7 +305,7 @@ class Pargs:
 
 ### Just some sample documentation
 DOC=R"""Usage: app.py (check | round | run) [ -v --verbose ] [ -V --version ]
-    (-h | --help | -i INT | -f FLOAT) <INFILE> [<OUTFILE>]
+    (-h | --help | -i INT | -f FLOAT -s STRING) <INFILE> [<OUTFILE>]
 
 Commands:
     run            run some code
@@ -319,6 +316,7 @@ Options:
     -v, --verbose      turn verbose on [default: False]
     -i, --int INT      Some integer [default: 10]
     -f, --float FLOAT  Some float   [default: 10.2]
+    -s, --string STR   Some string  [default: 'Hello']
 Arguments:
     <INFILE>       input file with some numbers
     <OUTFILE>      output file [default: '-']
@@ -340,23 +338,26 @@ def main(argv):
     v = pargs.parse("bool","-v","--verbose",False)
     x = pargs.parse("int","-i","--int",10)
     if x == None: sys.exit()
-    f = pargs.parse("float","-f","--flt",10.2)
+    f = pargs.parse("float","-f","--float",10.2)
     if f == None: sys.exit()
+    s = pargs.parse("string","-s","--string","Hi")
+    if s == None: sys.exit()
     # check for wrong options    
     if not pargs.check(): sys.exit()
     infile,outfile=pargs.position(2)
     if infile == "-": 
         pargs.error("Missing <INFILE> argument!")
         print(pargs.usage()); exit()
-    print("c: %s " % (c))           
-    print("v: %s " % (v))            
+    print("c: %s " % (c))
+    print("v: %s " % (v))
     print("x: %i - f: %.3f" % (x,f))
+    print("s: %s" % (s))
     print("infile: '%s' - outfile: '%s'" % (infile,outfile))
   
-if __name__ == "__main__":           
+if __name__ == "__main__":
     main(sys.argv)
 #' 
-#' ## TODO        
+#' ## TODO
 #'   
 #' - subcommands (done)
 #' - --opt=val syntax (done)

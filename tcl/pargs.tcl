@@ -184,8 +184,10 @@ oo::class create Pargs {
                     my error "Error: Given default for '$ashort' or '$along' is not boolean!"
                 } 
             } elseif {$type in [list int float string]} {
-                if {[llength $options(-argv)] < $idx} {
-                    my error "Error: Mising value for option '$ashort' or '$along'!"
+                if {[llength $options(-argv)] < [expr {$idx+2}]} {
+                    my error "Error: Missing value for option '$ashort' or '$along'!"
+                    set options(-argv) [list]
+                    return ""
                 } else {
                     set val [lindex $options(-argv) [expr {$idx+1}]]
                     set options(-argv) [lreplace $options(-argv) $idx $idx]
@@ -327,13 +329,19 @@ oo::class create Pargs {
 
 set DOC {
     Usage: pargs.tcl (-h|--help|-V,--version)
-              ( run | stop )
-              <INFILE> [OUTFILE]
-              
+       ( run | stop )
+       [-i INT -f FLOAT -s STRING]
+       <INFILE> [OUTFILE]
+       
+    Subcommands:
+        run                 run some code
+        stop                stop the application
     Options:
-        -h,--help       display this help page
-        -V,--version    display the application version
-        -i,--int   INT  some integer, default: 10
+        -h,--help           display this help page
+        -V,--version        display the application version
+        -i,--int   INT      some integer, default: 10
+        -f,--float FLOAT    some integer, default: 20.5
+        -s,--string STRING  some string, default: Hello
         
     Positional Arguments:
          INFILE          input file to be parsed
@@ -355,6 +363,8 @@ if {[info exists argv0] && $argv0 eq [info script]} {
     set cmd [$pargs subcommand [list name run]]
     if {$cmd eq ""} { exit }
     set i [$pargs parse int -i --int 12]
+    set f [$pargs parse float -f --float 23.5]
+    set s [$pargs parse string -s --string Hi]
     if {![$pargs check-options]} { exit }
     set infile [$pargs positional]
     if {$infile eq "-"} {
@@ -362,7 +372,8 @@ if {[info exists argv0] && $argv0 eq [info script]} {
         puts [$pargs usage]; exit
     }
     set outfile [$pargs positional]
-    puts "Hi! -i is $i"
+    puts "Hi! -i is $i - -f is $f"
+    puts "-s is $s "
     puts "infile: $infile - outfile: $outfile"
 }
     

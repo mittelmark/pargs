@@ -1,24 +1,27 @@
 # pargs
 
-Simple command line argument parser implemented in Python and in Tcl.
+Simple command line argument parser implemented in Python, R and Tcl.
 
 These implementations provide easy to use easy parsing of command line options
-for terminal  applications in the programming  languages Python and Tcl. These
-package/  modules can be seen as small version of the full fledge command line
+for terminal  applications in the programming  languages Python, R and Tcl. These
+package/  modules can be seen as small version of the full fledged command line
 parsers like argparse or docopt. 
 
 
 - [pargs.tcl - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/tcl/pargs.html)
 - [pargs.py - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/python/pargs.html)
+- [pargs.R - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/R/pargs.html)
 
 ## Installation
 
 There just single files which you need to add to add to your application.
 
+- [pargs.py](python/pargs.py) - place this file beside your application files
+and use `import pargs` in your import section.
+- [pargs.R](R/pargs.R)   -   place   this   file   into   a   folder   like
+`~/R/source/pargs.R` and source it within your application
 -  [pargs.tcl](tcl/pargs.tcl) - place this file beside of your application and
 use `source [file join [file dirname [info script]] pargs.tcl]` in your application 
--  [pargs.py](python/pargs.py) - place this file beside your application files
-and use `import pargs` in your import section.
 
 ## Comparison
 
@@ -35,6 +38,7 @@ and use `import pargs` in your import section.
 
 
 - 2025-12-13: first public version
+- 2025-12-14: R version
 
 ## Author and Copyright
 
