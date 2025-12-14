@@ -1,14 +1,14 @@
 #!/usr/bin/env Rscript
 #' ---
-#' title: pargs.R - Command line parsing for DBP lectures.
+#' title: pargs.R 0.1.0 - Command line parsing for R 
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2025-12-13
+#' date: 2025-12-14
 #' ---
 #' 
 #' ## NAME
 #' 
 #' __pargs.R__ - This module provides a simple environment class to allow command line argument parsing
-#' for R applications.
+#' for R applications. It is the poor students command line parser alternative to the argparse and argparser packages.
 #' 
 #' `include pargs.toc`
 #' 
@@ -57,7 +57,7 @@
 #'     <OUTFILE>          optional output file [default: '-']
 #' "
 #' ## using Module documentation __doc__ for help
-#' VERSION = "0.0.1"
+#' VERSION = "0.1.0"
 #' main = function (argv) {
 #'     ## just some demo code
 #'     DOC=gsub("APP",argv[1],DOC)
@@ -426,7 +426,7 @@ Arguments:
     <OUTFILE>          optional output file [default: '-']
 "
 ## using Module documentation __doc__ for help
-VERSION = "0.0.1"
+VERSION = "0.1.0"
 main = function (argv) {
     ## just some demo code
     DOC=gsub("APP",argv[1],DOC)
@@ -486,7 +486,8 @@ if (sys.nframe() == 0L && !interactive()) {
 
 #' ## CHANGES
 #'
-#' - 2025-12-13: Version 0.0.5 initial checkin into Gituup, removing exits from class
+#' . 2ß25-12.13: Version 0.1.0 - first R version
+#' - 2025-12-13: Version 0.0.5 initial checkin into Gitup, removing exits from class
 #' - 2025-12-12: Version 0.0.4 initial use in lecture
 #' 
 #' ## AUTHOR
