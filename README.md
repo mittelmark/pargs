@@ -45,7 +45,7 @@ use `source [file join [file dirname [info script]] pargs.tcl]` in your applicat
 
 ## TODO
 
-- [ ] adding support for --flag  TRUE|true|True  and --flag  FALSE|false|False
+- [x] adding support for --flag  TRUE|true|True  and --flag  FALSE|false|False
 case insensitive syntax
 
 ## Author and Copyright
