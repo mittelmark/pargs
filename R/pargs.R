@@ -282,8 +282,17 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
     }
     if (idx>0) {
         if (type == "bool") {
+            res = TRUE
+            if (length(self$argv)+1 >= idx) {
+                if (grepl("^(TRUE|1)$",toupper(self$argv[idx+1]))) {
+                    self$.pop(idx)
+                } else if (grepl("^(FALSE|0)$",toupper(self$argv[idx+1]))) {
+                    self$.pop(idx)
+                    res = FALSE
+                }
+            }
             self$.pop(idx)
-            return(TRUE)
+            return(res)
         } else if (type %in% c("int","float")) {
             if (length(self$argv)+1 < idx) {
                 self$error(sprintf("Error: missing argument for %s,%s!",ashort,along))

@@ -33,6 +33,13 @@ test:
 	Rscript pargs.R run -i=25 test.txt | grep -q "x: 25" && echo OK || echo Fail
 	Rscript pargs.R run -i 12 | grep -q "Missing <INFILE> argument" && echo OK || echo Fail
 	Rscript pargs.R run -i 12 test.txt | grep -q "infile: 'test.txt' - outfile: '-'" && echo OK || echo Fail
+	Rscript pargs.R run -i 15 test.txt | grep -q "v: FALSE" && echo OK || echo Fail
+	Rscript pargs.R run -i 15 -v test.txt | grep -q "v: TRUE" && echo OK || echo Fail	
+	Rscript pargs.R run -i 15 -v true test.txt | grep -q "v: TRUE" && echo OK || echo Fail		
+	Rscript pargs.R run -i 15 -v=true test.txt | grep -q "v: TRUE" && echo OK || echo Fail		
+	Rscript pargs.R run -i 15 -v=0 test.txt | grep -q "v: FALSE" && echo OK || echo Fail		
+	Rscript pargs.R run -i 15 -v True test.txt | grep -q "v: TRUE" && echo OK || echo Fail		
+	Rscript pargs.R run -i 15 -v True test.txt | grep -q "infile: 'test.txt' - outfile: '-'" && echo OK || echo Fail		
 	Rscript pargs.R run -f 33.5 test.txt | grep -q "f: 33.500" && echo OK || echo Fail
 	Rscript pargs.R run -f=33.5 test.txt | grep -q "f: 33.500" && echo OK || echo Fail
 	Rscript pargs.R run -s Test1 test.txt | grep -q "s: Test1" && echo OK || echo Fail

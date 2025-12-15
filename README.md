@@ -36,7 +36,10 @@ use `source [file join [file dirname [info script]] pargs.tcl]` in your applicat
 
 ## Changes
 
-- 2025-12-15: adding scriptname method, 17 tests
+- 2025-12-15: 
+    - adding scriptname method to return the main application filename
+    - adding support for flags with value so -v TRUE, --verbose FALSE or -v=0 etc
+    - more tests, now 24 tests
 - 2025-12-14: R version, adding tests in Makefiles
 - 2025-12-13: first public version Python and Tcl
 

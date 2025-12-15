@@ -205,8 +205,15 @@ class Pargs:
         elif along in self.argv:
             idx = self.argv.index(along)
         if idx > -1 and type == "bool":
+            res = True
+            if len(self.argv)>idx+1:
+                if re.match("^(FALSE|0)$",self.argv[idx+1],re.IGNORECASE):
+                    self.argv.pop(idx)
+                    res = False
+                elif re.match("^(TRUE|1)$",self.argv[idx+1],re.IGNORECASE):
+                    self.argv.pop(idx)  
             self.argv.pop(idx)
-            return True    
+            return res
         elif type == "bool":
             return False
         elif idx > -1 and type in ["int","float"]:

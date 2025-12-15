@@ -189,6 +189,18 @@ oo::class create Pargs {
         }
         if {$idx >= 0} {
             if {$type in [list bool boolean]} {
+                if {[llength $options(-argv)] >= [expr {$idx+2}]} {
+                    set val [lindex $options(-argv) [expr {$idx+1}]]
+                    if {[string toupper $val] in [list TRUE 1]} {
+                        set options(-argv) [lreplace $options(-argv) $idx $idx]
+                        set options(-argv) [lreplace $options(-argv) $idx $idx]
+                        return true
+                    } elseif {[string toupper $val] in [list FALSE 0]} {
+                        set options(-argv) [lreplace $options(-argv) $idx $idx]
+                        set options(-argv) [lreplace $options(-argv) $idx $idx]
+                        return false
+                    }
+                }
                 if {$default eq ""} {
                     set options(-argv) [lreplace $options(-argv) $idx $idx]
                     return true
@@ -340,7 +352,7 @@ oo::class create Pargs {
 }
 
 set DOC {
-    Usage: pargs.tcl (-h|--help|-V,--version)
+    Usage: pargs.tcl (-h|--help|-V,--version|-v,--verbose)
        ( run | stop )
        [-i INT -f FLOAT -s STRING]
        <INFILE> [OUTFILE]
@@ -374,6 +386,7 @@ if {[info exists argv0] && $argv0 eq [info script]} {
     }
     set cmd [$pargs subcommand [list name run]]
     if {$cmd eq ""} { exit }
+    set v [$pargs parse bool -v --verbose false]
     set i [$pargs parse int -i --int 12]
     set f [$pargs parse float -f --float 23.5]
     set s [$pargs parse string -s --string Hi]
@@ -387,6 +400,7 @@ if {[info exists argv0] && $argv0 eq [info script]} {
     puts "script: [$pargs scriptname]"
     puts "Hi! -i is $i - -f is $f"
     puts "-s is $s "
+    puts "-v is $v "    
     puts "infile: $infile - outfile: $outfile"
 }
     
