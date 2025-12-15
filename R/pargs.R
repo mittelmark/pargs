@@ -234,7 +234,8 @@ pargs$help <- function () {
     return(self$doc)
 }
 
-pargs$pop <- function (index) {
+## internal method
+pargs$.pop <- function (index) {
     self=pargs
     val=self$argv[index]
     if (index == 1) {
@@ -281,7 +282,7 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
     }
     if (idx>0) {
         if (type == "bool") {
-            self$pop(idx)
+            self$.pop(idx)
             return(TRUE)
         } else if (type %in% c("int","float")) {
             if (length(self$argv)+1 < idx) {
@@ -291,8 +292,8 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
             }
             if (type == "int") {
                 if (grepl("^[0-9]+$",self$argv[idx+1])) {
-                    val=as.integer(self$pop(idx+1))
-                    self$pop(idx)
+                    val=as.integer(self$.pop(idx+1))
+                    self$.pop(idx)
                     return(val)
                 } else {
                     self$error(sprintf("Error: Wrong argument for %s,%s! Not an integer!", ashort,along))
@@ -301,8 +302,8 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
                 }
             } else if (type == "float") {
                 if (grepl("^[\\.0-9]+$",self$argv[idx+1])) {
-                    val=as.numeric(self$pop(idx+1))
-                    self$pop(idx)
+                    val=as.numeric(self$.pop(idx+1))
+                    self$.pop(idx)
                     return(val)
                 } else {
                     self$error(sprintf("Error: Wrong argument for %s,%s! Not a float!", ashort,along))
@@ -316,8 +317,8 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
                 cat(self$usage())
                 return(NULL)
             } else {
-                val=self$pop(idx+1)
-                self$pop(idx)
+                val=self$.pop(idx+1)
+                self$.pop(idx)
                 return(val)
             }
         } else {
@@ -344,11 +345,24 @@ pargs$parse <- function (type, ashort, along,default=NULL) {
 pargs$position <- function (default="-") {
     self=pargs
     if (length(self$argv) > 0) {
-        val=pargs$pop(1)
+        val=pargs$.pop(1)
         return(val)
     } else {
         return(default)
     }
+}
+#'
+#' **pargs$scriptname()**
+#'
+#' Returns the filename of the main script.
+#'
+#' > Arguments: None
+#'
+#' > Returns: The name of the R file which Rscript got on the command line.
+
+pargs$scriptname <- function () {
+    self = pargs
+    return(self$script)
 }
 #'
 #' **pargs$subcommand(names)**
@@ -364,7 +378,7 @@ pargs$position <- function (default="-") {
 pargs$subcommand <- function (names) {
     self=pargs
     if (self$argv[1] %in% names) {
-        return(self$pop(1))
+        return(self$.pop(1))
     } else {
         self$error(sprintf("Error: Wrong subcommand '%s'!", self$argv[1]))
         self$error(sprintf("Valid subcommands are '%s'!", paste(names,collapse="','")))
@@ -456,6 +470,7 @@ main = function (argv) {
         q()
     }
     outfile=pargs$position()
+    cat(sprintf("script: %s\n",pargs$scriptname()))
     cat(sprintf("c: %s\n",c))
     cat(sprintf("v: %s\n",v))
     cat(sprintf("x: %i - f: %.3f\n", x,f))

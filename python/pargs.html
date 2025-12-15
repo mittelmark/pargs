@@ -28,7 +28,7 @@
     <div class="document-header">
 <h1 class="title">pargs.py - Command line parsing for DBP lectures.</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
-<h2 class="date">2025-12-13</h2>
+<h2 class="date">2025-12-15</h2>
     </div>
 
 <p><a name="name"> </a></p><h2>NAME</h2>
@@ -46,7 +46,7 @@ for Python applications.</p>
 <li><a href="#example">EXAMPLE</a></li>
 <li><a href="#classdocumentation">Class Documentation</a></li>
 <li><a href="#methods">Methods</a></li>
-<li><a href="#todo">TODO<br/></a></li>
+<li><a href="#todo">TODO</a></li>
 <li><a href="#seealso">SEE ALSO</a></li>
 <li><a href="#changes">CHANGES</a></li>
 <li><a href="#author">AUTHOR</a></li>
@@ -159,6 +159,12 @@ if __name__ == &quot;__main__&quot;:
 
 <p><a name="methods"> </a></p><h2>Methods</h2>
 
+<p><strong>def check(self)</strong></p>
+
+<p>Check for any not supported option present in argv.
+Should be used only after the parse method. Returns True 
+if the checkwas succesfull, and False if not.</p>
+
 <p><strong>def error(self,msg)</strong></p>
 
 <p>Colored error message.</p>
@@ -172,20 +178,9 @@ if __name__ == &quot;__main__&quot;:
 
 </blockquote>
 
-<p><strong>def subcommand(self, names)</strong></p>
+<p><strong>def help(self)</strong></p>
 
-<p>Check first argument for a valid subcommand.</p>
-
-<blockquote>
-<p><em>Arguments:</em></p>
-
-<ul>
-<li><em>names</em>: list of valid subcommands to search against</li></ul>
-
-
-</blockquote>
-
-<p>Returns: subcommand name if valid or empty string.</p>
+<p>Display full help page.</p>
 
 <p><strong>def parse(self,type, ashort, along,default=None)</strong></p>
 
@@ -204,12 +199,6 @@ the boolean type is handeled as a flag and expects no value</li>
 
 </blockquote>
 
-<p><strong>def check(self)</strong></p>
-
-<p>Check for any not supported option present in argv.
-Should be used only after the parse method. Returns True 
-if the checkwas succesfull, and False if not.</p>
-
 <p><strong>def position(self,max=1,default=&quot;-&quot;)</strong></p>
 
 <p>Check for positional arguments.
@@ -226,9 +215,30 @@ so usually last.</p>
 
 </blockquote>
 
-<p><strong>def help(self)</strong></p>
+<p><strong>def scriptname(self)</strong></p>
 
-<p>Display full help page.</p>
+<p>Returns the main filename with which the python3 interpreter was called.</p>
+
+<blockquote>
+<p><em>Arguments:</em></p>
+
+<p>Returns: The Python script filename whch was used to start the Python application.</p>
+</blockquote>
+
+<p><strong>def subcommand(self, names)</strong></p>
+
+<p>Check first argument for a valid subcommand.</p>
+
+<blockquote>
+<p><em>Arguments:</em></p>
+
+<ul>
+<li><em>names</em>: list of valid subcommands to search against</li></ul>
+
+
+</blockquote>
+
+<p>Returns: subcommand name if valid or empty string.</p>
 
 <p><strong>def usage(self)</strong></p>
 
@@ -238,7 +248,7 @@ so usually last.</p>
 
 <p>Display application version.</p>
 
-<p><a name="todo"> </a></p><h2>TODO<br/></h2>
+<p><a name="todo"> </a></p><h2>TODO</h2>
 
 <ul>
 <li>subcommands (done)</li>
@@ -261,6 +271,7 @@ so usually last.</p>
 <p><a name="changes"> </a></p><h2>CHANGES</h2>
 
 <ul>
+<li>2025-12-15: version 0.0.6 support for scriptname method</li>
 <li>2025-12-13: Version 0.0.5 initial checkin into Gituup, removing exits from class</li>
 <li>2025-12-12: Version 0.0.4 initial use in lecture
 </li></ul>

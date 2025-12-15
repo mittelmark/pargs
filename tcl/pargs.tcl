@@ -1,8 +1,8 @@
 #!/usr/bin/env tclsh
 #' ---
-#' title: pargs 0.0.1
+#' title: pargs 0.0.2
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2025-12-13
+#' date: 2025-12-15
 #' ---
 #' 
 #' ## NAME
@@ -53,7 +53,7 @@
 #'
 #' 
 ##############################################################################
-package provide pargs 0.0.1
+package provide pargs 0.0.2
 package require Tcl 8.6-
 
 oo::class create Pargs {
@@ -100,6 +100,29 @@ oo::class create Pargs {
     #'
     #' ### Methods
     #'
+    #' _cmd_ **check-options**
+    #'
+    #' > After parsing all flags and options checks for the presence of
+    #' options which were not extracted yet., if the exists shows an 
+    #' error message and exits the application. Returns true if all is OK
+    #' and false if there is an error within the options.
+    #'
+    method check-options {} {
+        my variable options
+        set e false
+        foreach arg $options(-argv) {
+            if {[regexp {^--?\w} $arg]} {
+                my error "Error: Wrong option '$arg'!"
+                set e true
+            }
+        }
+        if {$e} {
+            return false
+        } else {
+            return true
+        }
+    }
+    #'
     #' _cmd_  **configure** _args_
     #'
     #' > The configure method for the arguments shown in the constructor.
@@ -127,29 +150,21 @@ oo::class create Pargs {
         }
     }
     #'
-    #' _cmd_  **subcommand** _names_
+    #' _cmd_ **help**
     #'
-    #' > Looks if the first argument is one of the subcommands given in names.
-    #' If this is the case returns the command name otherwise an empty string.
+    #' > Returns the help lines.
     #'
-    #' > Example:
-    #'
+    #' >  Example:
+    #' 
     #' > ```
-    #' set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
-    #' set cmd [$pargs subcommand [list run stop]]
-    #' if {$cmd eq ""} { exit }
+    #' set h [$pargs parse bool -h --help false]
+    #' if {$h} { $pargs help ; exit }
     #' > ```
-    
-    method subcommand {names} {
-        my variable options 
-        set cmd [lindex $options(-argv) 0]
-        if {[lindex $options(-argv) 0] in $names} {
-            set options(-argv) [lrange $options(-argv) 1 end]
-            return $cmd
-        } else {
-            my error "Error: Unkown subcommand '[lindex $options(-argv) 0]', known subcommands are: '[join $names ',']!"
-            return ""
-        }
+    #'
+    method help {} {
+        my variable options
+        
+        return [string trim $options(-doc)]
     }
     #'
     #' _cmd_ ** parse** _type ashort along default_
@@ -214,29 +229,6 @@ oo::class create Pargs {
         }
     }
     #'
-    #' _cmd_ **check-options**
-    #'
-    #' > After parsing all flags and options checks for the presence of
-    #' options which were not extracted yet., if the exists shows an 
-    #' error message and exits the application. Returns true if all is OK
-    #' and false if there is an error within the options.
-    #'
-    method check-options {} {
-        my variable options
-        set e false
-        foreach arg $options(-argv) {
-            if {[regexp {^--?\w} $arg]} {
-                my error "Error: Wrong option '$arg'!"
-                set e true
-            }
-        }
-        if {$e} {
-            return false
-        } else {
-            return true
-        }
-    }
-    #'
     #' _cmd_ **positional** _default "-"_
     #'
     #' > Parses the list of command line options for the presence of positional
@@ -264,21 +256,41 @@ oo::class create Pargs {
         }
     }
     #'
-    #' _cmd_ **help**
+    #' _cmd_  **scriptname**
     #'
-    #' > Returns the help lines.
+    #' Returns the filename of the main script.
     #'
-    #' >  Example:
-    #' 
+    #' > Arguments: None
+    #'
+    #' > Returns: The name of the Tcl file which the tclsh or the wish application
+    #'   got on the command line as the filename argument.
+    method scriptname {} {
+        return $::argv0
+    }
+    #'
+    #' _cmd_  **subcommand** _names_
+    #'
+    #' > Looks if the first argument is one of the subcommands given in names.
+    #' If this is the case returns the command name otherwise an empty string.
+    #'
+    #' > Example:
+    #'
     #' > ```
-    #' set h [$pargs parse bool -h --help false]
-    #' if {$h} { $pargs help ; exit }
+    #' set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
+    #' set cmd [$pargs subcommand [list run stop]]
+    #' if {$cmd eq ""} { exit }
     #' > ```
-    #'
-    method help {} {
-        my variable options
-        
-        return [string trim $options(-doc)]
+    
+    method subcommand {names} {
+        my variable options 
+        set cmd [lindex $options(-argv) 0]
+        if {[lindex $options(-argv) 0] in $names} {
+            set options(-argv) [lrange $options(-argv) 1 end]
+            return $cmd
+        } else {
+            my error "Error: Unkown subcommand '[lindex $options(-argv) 0]', known subcommands are: '[join $names ',']!"
+            return ""
+        }
     }
     #'
     #' _cmd_ **usage**
@@ -372,6 +384,7 @@ if {[info exists argv0] && $argv0 eq [info script]} {
         puts [$pargs usage]; exit
     }
     set outfile [$pargs positional]
+    puts "script: [$pargs scriptname]"
     puts "Hi! -i is $i - -f is $f"
     puts "-s is $s "
     puts "infile: $infile - outfile: $outfile"
@@ -435,6 +448,7 @@ if {[info exists argv0] && $argv0 eq [info script]} {
 
 #' ## CHANGES
 #'
+#' - 2025-12-15: Version 0.0.2 support for scriptname method
 #' - 2025-12-13: Version 0.0.1 initial setup
 #' 
 #' ## AUTHOR

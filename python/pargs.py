@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """pargs.py - Command line parsing for DBP lectures.
 Detlef Groth, University of Potsdam, Germany
-2025-12-13
+2025-12-15
 
 ## NAME
 
@@ -155,6 +155,24 @@ class Pargs:
         #' 
         #' ## Methods
         #'
+    def check(self):
+        """
+        Check for any not supported option present in argv.
+        Should be used only after the parse method. Returns True 
+        if the checkwas succesfull, and False if not.
+        
+        """
+        
+        rhy = re.compile("--?\\w")
+        l = list(filter(rhy.match,self.argv))
+        if len(l)>0:
+            for i in l:
+                self.error("Error: Wrong argument: '%s'!" % i)
+                print(self.usage())
+            return(False)
+        else:
+            return(True)
+            
     def error(self,msg):
         """
         Colored error message.
@@ -164,22 +182,12 @@ class Pargs:
         """
         print("%s%s%s" % (self.RED,msg,self.DEF))
 
-    def subcommand(self, names):
+    def help(self):
         """
-        Check first argument for a valid subcommand.
-        
-        Arguments:
-            names   - list of valid subcommands to search against
-        
-        Returns: subcommand name if valid or empty string.
+        Display full help page.
         """
-        if self.argv[1] in names:
-            return(self.argv.pop(1))
-        else:
-            self.error("Error: Wrong subcommand '%s'!" % (self.argv[1]))
-            self.error("Valid subcommands are '%s'!" % ("','".join(names)))
-            print(self.usage())
-            return(None)
+        return(self.doc.format(self.argv[0]))
+        
     def parse(self,type, ashort, along,default=None):
         """
         Initialize options with possible defaults.
@@ -243,24 +251,6 @@ class Pargs:
         else:
             return(default)
     
-    def check(self):
-        """
-        Check for any not supported option present in argv.
-        Should be used only after the parse method. Returns True 
-        if the checkwas succesfull, and False if not.
-        
-        """
-        
-        rhy = re.compile("--?\\w")
-        l = list(filter(rhy.match,self.argv))
-        if len(l)>0:
-            for i in l:
-                self.error("Error: Wrong argument: '%s'!" % i)
-                print(self.usage())
-            return(False)
-        else:
-            return(True)
-            
     def position(self,max=1,default="-"):
         """
         Check for positional arguments.
@@ -278,12 +268,32 @@ class Pargs:
             else:
                 res.append(default)
         return(res)
-    def help(self):
+    def scriptname(self):
         """
-        Display full help page.
-        """
-        return(self.doc.format(self.argv[0]))
+        Returns the main filename with which the python3 interpreter was called.
         
+        Arguments: None
+        
+        Returns: The Python script filename whch was used to start the Python application.
+        """
+        return(self.argv[0])
+        
+    def subcommand(self, names):
+        """
+        Check first argument for a valid subcommand.
+        
+        Arguments:
+            names   - list of valid subcommands to search against
+        
+        Returns: subcommand name if valid or empty string.
+        """
+        if self.argv[1] in names:
+            return(self.argv.pop(1))
+        else:
+            self.error("Error: Wrong subcommand '%s'!" % (self.argv[1]))
+            self.error("Valid subcommands are '%s'!" % ("','".join(names)))
+            print(self.usage())
+            return(None)
     def usage(self):
         """
         Display docu text until the first empty line within that text.
@@ -348,6 +358,7 @@ def main(argv):
     if infile == "-": 
         pargs.error("Missing <INFILE> argument!")
         print(pargs.usage()); exit()
+    print("script: %s " % (pargs.scriptname()))
     print("c: %s " % (c))
     print("v: %s " % (v))
     print("x: %i - f: %.3f" % (x,f))
@@ -377,6 +388,7 @@ if __name__ == "__main__":
 
 #' ## CHANGES
 #'
+#' - 2025-12-15: version 0.0.6 support for scriptname method
 #' - 2025-12-13: Version 0.0.5 initial checkin into Gituup, removing exits from class
 #' - 2025-12-12: Version 0.0.4 initial use in lecture
 #' 

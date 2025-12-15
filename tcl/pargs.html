@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="pargs 0.0.1">
+<meta name="title" content="pargs 0.0.2">
 <meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
-<title>pargs 0.0.1</title>
+<title>pargs 0.0.2</title>
     
     
 
@@ -26,9 +26,9 @@
 
 
     <div class="document-header">
-<h1 class="title">pargs 0.0.1</h1>
+<h1 class="title">pargs 0.0.2</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
-<h2 class="date">2025-12-13</h2>
+<h2 class="date">2025-12-15</h2>
     </div>
 
 <p><a name="name"> </a></p><h2>NAME</h2>
@@ -121,6 +121,15 @@ the presence of unsupported options should be done and thereafter the parsing of
 
 <p><a name="methods"> </a></p><h3>Methods</h3>
 
+<p><em>cmd</em> <strong>check-options</strong></p>
+
+<blockquote>
+<p>After parsing all flags and options checks for the presence of
+options which were not extracted yet., if the exists shows an 
+error message and exits the application. Returns true if all is OK
+and false if there is an error within the options.</p>
+</blockquote>
+
 <p><em>cmd</em>  <strong>configure</strong> <em>args</em></p>
 
 <blockquote>
@@ -136,17 +145,15 @@ the options array, keys and values.</p>
 set to true, errors are shown in red foreground color.</p>
 </blockquote>
 
-<p><em>cmd</em>  <strong>subcommand</strong> <em>names</em></p>
+<p><em>cmd</em> <strong>help</strong></p>
 
 <blockquote>
-<p>Looks if the first argument is one of the subcommands given in names.
-If this is the case returns the command name otherwise an empty string.</p>
+<p>Returns the help lines.</p>
 
 <p>Example:</p>
 
-<pre class='code'><code>set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
-set cmd [$pargs subcommand [list run stop]]
-if {$cmd eq &quot;&quot;} { exit }</code></pre>
+<pre class='code'><code>set h [$pargs parse bool -h --help false]
+if {$h} { $pargs help ; exit }</code></pre>
 </blockquote>
 
 <p><em>cmd</em> <strong> parse</strong> <em>type ashort along default</em></p>
@@ -163,15 +170,6 @@ if {$h} { puts [$pargs help] ; exit }
 set i [$pargs parse int    -i --int   20]
 set f [$pargs parse float  -f --float 3.14]
 set s [$pargs parse string -s --simple greeting]    </code></pre>
-</blockquote>
-
-<p><em>cmd</em> <strong>check-options</strong></p>
-
-<blockquote>
-<p>After parsing all flags and options checks for the presence of
-options which were not extracted yet., if the exists shows an 
-error message and exits the application. Returns true if all is OK
-and false if there is an error within the options.</p>
 </blockquote>
 
 <p><em>cmd</em> <strong>positional</strong> <em>default &quot;-&quot;</em></p>
@@ -191,15 +189,28 @@ if {$infile eq &quot;-&quot;} {
 }</code></pre>
 </blockquote>
 
-<p><em>cmd</em> <strong>help</strong></p>
+<p><em>cmd</em>  <strong>scriptname</strong></p>
+
+<p>Returns the filename of the main script.</p>
 
 <blockquote>
-<p>Returns the help lines.</p>
+<p>Arguments: None</p>
+
+<p>Returns: The name of the Tcl file which the tclsh or the wish application
+  got on the command line as the filename argument.</p>
+</blockquote>
+
+<p><em>cmd</em>  <strong>subcommand</strong> <em>names</em></p>
+
+<blockquote>
+<p>Looks if the first argument is one of the subcommands given in names.
+If this is the case returns the command name otherwise an empty string.</p>
 
 <p>Example:</p>
 
-<pre class='code'><code>set h [$pargs parse bool -h --help false]
-if {$h} { $pargs help ; exit }</code></pre>
+<pre class='code'><code>set pargs [Pargs new -doc $DOC -argv $argv -version [package present apppkg]
+set cmd [$pargs subcommand [list run stop]]
+if {$cmd eq &quot;&quot;} { exit }</code></pre>
 </blockquote>
 
 <p><em>cmd</em> <strong>usage</strong></p>
@@ -285,6 +296,7 @@ if {[info exists argv0] &amp;&amp; $argv0 eq [info script]} {
 <p><a name="changes"> </a></p><h2>CHANGES</h2>
 
 <ul>
+<li>2025-12-15: Version 0.0.2 support for scriptname method</li>
 <li>2025-12-13: Version 0.0.1 initial setup
 </li></ul>
 

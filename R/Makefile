@@ -27,6 +27,7 @@ test:
 	Rscript pargs.R -i 12 | grep -q "Valid subcommands are" && echo OK || echo Fail 2>/dev/null
 	Rscript pargs.R dummy -i 12 | grep -q "Wrong subcommand 'dummy'" && echo OK || echo Fail
 	Rscript pargs.R run -i 15 test.txt | grep -q "x: 15" && echo OK || echo Fail
+	Rscript pargs.R run -i 15 text | grep -q "script: pargs.R" && echo OK || echo Fail
 	Rscript pargs.R run -i | grep -q "Error: Wrong argument" && echo OK || echo Fail
 	Rscript pargs.R run -s | grep -q "Error: Missing argument" && echo OK || echo Fail
 	Rscript pargs.R run -i=25 test.txt | grep -q "x: 25" && echo OK || echo Fail

@@ -27,6 +27,7 @@ test:
 	python3 pargs.py -i 12 | grep -q "Valid subcommands are" && echo OK || echo Fail
 	python3 pargs.py dummy -i 12 | grep -q "Wrong subcommand 'dummy'" && echo OK || echo Fail
 	python3 pargs.py run -i 15 test.txt | grep -q "x: 15" && echo OK || echo Fail
+	python3 pargs.py run -i 15 test.txt | grep -q "script: pargs.py" && echo OK || echo Fail
 	python3 pargs.py run -i=25 test.txt | grep -q "x: 25" && echo OK || echo Fail
 	python3 pargs.py run -i | grep -q "Error: Missing argument" && echo OK || echo Fail	
 	python3 pargs.py run -i 12 | grep -q "Missing <INFILE> argument" && echo OK || echo Fail

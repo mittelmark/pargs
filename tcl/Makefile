@@ -31,6 +31,7 @@ test-app:
 	tclsh pargs.tcl -i 12 | grep -q "known subcommands are" && echo OK || echo Fail
 	tclsh pargs.tcl dummy -i 12 | grep -q "Unkown subcommand 'dummy'" && echo OK || echo Fail
 	tclsh pargs.tcl run -i 15 test.txt | grep -q "i is 15" && echo OK || echo Fail
+	tclsh pargs.tcl run -i 15 test.txt | grep -q "script: pargs.tcl" && echo OK || echo Fail	
 	tclsh pargs.tcl run -i=25 test.txt | grep -q "i is 25" && echo OK || echo Fail
 	tclsh pargs.tcl run -i | grep -q "Error: Missing value for option" && echo OK || echo Fail		
 	tclsh pargs.tcl run -i 12 | grep -q "Missing <INFILE> argument" && echo OK || echo Fail
