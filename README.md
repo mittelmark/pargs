@@ -40,6 +40,11 @@ use `source [file join [file dirname [info script]] pargs.tcl]` in your applicat
 - 2025-12-14: R version, adding tests in Makefiles
 - 2025-12-13: first public version Python and Tcl
 
+## TODO
+
+- [ ] adding support for --flag  TRUE|true|True  and --flag  FALSE|false|False
+case insensitive syntax
+
 ## Author and Copyright
 
 
