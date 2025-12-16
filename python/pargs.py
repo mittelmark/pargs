@@ -267,6 +267,10 @@ class Pargs:
         Arguments:
             max     - maximal number of arguments  [default:  1 ]
             default - value if argument is missing [default: '-']
+            
+        Returns: Either a list of positional arguments, where a '-' is used
+                 to indicate a missing argument, or a single string for the
+                 argument if only one positional argument is requested.
         """
         res = []
         for i in range(1,max+1):
