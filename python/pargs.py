@@ -274,7 +274,10 @@ class Pargs:
                 res.append(self.argv[i])
             else:
                 res.append(default)
-        return(res)
+        if len(res)==1:
+            return(res[0])
+        else:
+            return(res)
     def scriptname(self):
         """
         Returns the main filename with which the python3 interpreter was called.
