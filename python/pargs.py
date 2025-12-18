@@ -53,7 +53,7 @@ Arguments:
     <OUTFILE>          optional output file [default: '-']
 '''
 ## using Module documentation __doc__ for help
-__version__ = "0.0.1"
+__version__ = "0.0.6"
 import sys
 import pargs
 def main(argv)
@@ -346,7 +346,7 @@ Arguments:
     <OUTFILE>      output file [default: '-']
 """
 import sys
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 def main(argv):
     from pargs import Pargs
@@ -412,7 +412,7 @@ if __name__ == "__main__":
 #'
 #' ## LICENSE AND COPYRIGHT
 #'
-#' pargs command line argument parser for Tcl/Tk version 0.0.1
+#' pargs command line argument parser for Python version 0.0.6
 #'
 #' Copyright (c) 2025  Detlef Groth, E-mail: <dgroth(at)uni(minus)potsdam(dot)de>
 #' 
