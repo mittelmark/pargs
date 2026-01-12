@@ -75,3 +75,5 @@ vlang:
 	mv out/$(main) out/$(main)-v
 	./out/$(main)-v
 
+make all:
+	make cpp dlang go julia python rust vlang | grep 377 | wc -l
