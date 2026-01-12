@@ -14,7 +14,7 @@ def add(i: int, j: int) -> int:
     return i + j
 
 if __name__ == "__main__":
-    print(fib(12))
+    print(fib(13))
     print(add(1,12))
     h = Hi()
     h.hello()
