@@ -1,0 +1,11 @@
+name: fib
+description: >-
+  Have you been turned into a newt?  Would you like to be?
+  This package can help. It has all of the
+  newt-transmogrification functionality you have been looking
+  for.
+version: 0.0.1
+environment:
+  sdk: '^3.10.0'
+dependencies:
+  sprintf: "^7.0.0"

@@ -25,6 +25,17 @@ cpp:
 	g++ -std=c++17 out/$(main).cpp -o out/$(main)-cpp
 	./out/$(main)-cpp
 
+dart:
+	# https://dart.dev/get-dart/archive
+	# wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.10.7/linux_packages/dart_3.10.7-1_amd64.deb
+	# sudo dpkg -i dart_3.10.7-1_amd64.deb
+	# dart pub install sprintf
+	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --dart=1 --outdir out $(main).py 
+	dart run out/fib.dart
+	dart compile exe out/$(main).dart
+	mv out/$(main).exe out/$(main)-dart
+	./out/$(main)-dart 
+	
 dlang:
 	## https://dlang.org/download.html#dmd
 	## sudo dpkg -i dmd_2.112.0-0_amd64.dmd
