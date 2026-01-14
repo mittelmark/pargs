@@ -1,0 +1,19 @@
+/****************************************************************************
+ *
+ * Copyright (C) 2026 MicroEmacs User.
+ *
+ * All rights reserved.
+ *
+ * Synopsis:    
+ * Authors:     MicroEmacs User
+ *
+ ****************************************************************************/
+
+public static class Pargs {
+    /// Returns a greeting message.
+    public static string GetMessage()
+    {
+        return "Hello, world!";
+    }
+}
+
