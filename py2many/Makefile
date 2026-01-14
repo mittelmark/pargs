@@ -31,7 +31,7 @@ dart:
 	# sudo dpkg -i dart_3.10.7-1_amd64.deb
 	# dart pub install sprintf
 	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --dart=1 --outdir out $(main).py 
-	dart run out/fib.dart
+	dart run out/$(main).dart
 	dart compile exe out/$(main).dart
 	mv out/$(main).exe out/$(main)-dart
 	./out/$(main)-dart 
@@ -40,14 +40,14 @@ dlang:
 	## https://dlang.org/download.html#dmd
 	## sudo dpkg -i dmd_2.112.0-0_amd64.dmd
 	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --dlang=1 --outdir out $(main).py 
-	dmd out/fib.d
-	mv fib out/fib-d
-	./out/fib-d		
+	dmd out/$(main).d
+	mv $(main) out/$(main)-d
+	./out/$(main)-d		
 
 go:
 	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --go=1 --outdir out $(main).py	
 	go run out/$(main).go
-	if [ -f fib ]; then rm fib ; fi
+	if [ -f $(main) ]; then rm $(main) ; fi
 	go build out/$(main).go 
 	mv $(main) out/$(main)-go
 	./out/$(main)-go
@@ -76,7 +76,7 @@ rust:
 	# [dependencies]
 	# anyhow = "1.0"
 	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --rust=1 --outdir out $(main).py
-	cp out/fib.rs fibprj/src/main.rs
+	cp out/$(main).rs fibprj/src/main.rs
 	cd fibprj/ && cargo run
 	#./fibprj/target/debug/fibprj
 vlang:
@@ -86,5 +86,8 @@ vlang:
 	mv out/$(main) out/$(main)-v
 	./out/$(main)-v
 
+zig:
+	echo here
+	PYTHONPATH=`pwd`/../../py2many python3 -m py2many --zig=1 --outdir out $(main).py	
 make all:
-	make cpp dlang go julia python rust vlang | grep 377 | wc -l
+	make cpp dart dlang go julia nim python rust vlang main=$(main)
