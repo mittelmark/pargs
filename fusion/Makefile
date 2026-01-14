@@ -58,6 +58,10 @@ ts-run:
 	tsc ts/pargs.ts
 	node ts/run-pargs.js
 swift-run:
+	## Download tar.gz: https://www.swift.org/install/linux/debian/12/
+	## add /usr/bin folder therein to the PATH
+	## swift package init --type executable
+	## replace files in Source/swift where sources/swift/swift.swift is the main file
 	fut -o swift/pargs.swift pargs.fu
 	cp swift/pargs.swift swift/Sources/swift/pargs.swift
 	cp swift/run-pargs.swift swift/Sources/swift/swift.swift	
