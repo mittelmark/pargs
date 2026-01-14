@@ -57,3 +57,10 @@ ts-run:
 	fut -o ts/pargs.ts pargs.fu
 	tsc ts/pargs.ts
 	node ts/run-pargs.js
+swift-run:
+	fut -o swift/pargs.swift pargs.fu
+	cp swift/pargs.swift swift/Sources/swift/pargs.swift
+	cp swift/run-pargs.swift swift/Sources/swift/swift.swift	
+	cd swift && swift build
+	cd swift && swift run
+	./swift/.build/x86_64-unknown-linux-gnu/debug/swift
