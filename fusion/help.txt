@@ -1,0 +1,14 @@
+Usage: __{app__ (-h | --help) 
+        [ -V, --version, -v,--verbose -i INT -f FLOAT]
+         <INFILE> [<OUTFILE>]
+         
+Options:
+    -h, --help               display this help message
+    -V, --version            display the application version
+    -v, --verbose            set verbose to true
+    -i INT, --int INT        give an integer [default: 10]
+    -f FLOAT, --float FLOAT  give a float value [default: 10.5] 
+    
+Arguments:
+    <INFILE>           mandatory input filea
+    <OUTFILE>          optional output file [default: '-']
