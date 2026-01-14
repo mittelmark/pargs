@@ -53,3 +53,7 @@ java-run:
 js-run:
 	fut -o js/pargs.js pargs.fu
 	node js/run-pargs.js
+ts-run:
+	fut -o ts/pargs.ts pargs.fu
+	tsc ts/pargs.ts
+	node ts/run-pargs.js
