@@ -9,9 +9,9 @@
  *
  ****************************************************************************/
 
-public static class Pargs {
+public class Pargs {
     /// Returns a greeting message.
-    public static string GetMessage()
+    public string GetMessage()
     {
         return "Hello, world!";
     }

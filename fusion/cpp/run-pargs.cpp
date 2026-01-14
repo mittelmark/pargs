@@ -12,7 +12,8 @@
 #include <iostream>
 #include "pargs.hpp"
 int main (int argc, char * argv[]) {
-    std::cout << Pargs::getMessage() << std::endl;
+    Pargs pargs = Pargs();
+    std::cout << pargs.getMessage() << std::endl;
     return(0);
 }
 

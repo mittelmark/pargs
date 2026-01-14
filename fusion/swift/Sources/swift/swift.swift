@@ -4,7 +4,8 @@
 @main
 struct swift {
     static func main() {
-        print(Pargs.getMessage());
+        let pargs = Pargs();
+        print(pargs.getMessage());
         print("Hello Swift World!");
     }
 }

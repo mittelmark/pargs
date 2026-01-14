@@ -12,7 +12,8 @@
 #include "pargs.h"
 
 int main (int argc, char * argv[]) {
-    printf("%s\n",Pargs_GetMessage());
+    Pargs *pargs = {};
+    printf("%s\n",Pargs_GetMessage(pargs));
     return(0);
 }
 

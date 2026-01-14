@@ -8,11 +8,11 @@
  * Authors:     MicroEmacs User
  *
  ****************************************************************************/
-using System;
+
 public class RunPargs {
-    static public void Main () {
+    public static void main(String[] args) {
         Pargs pargs = new Pargs();
-        Console.WriteLine(pargs.GetMessage());
+        System.out.println(pargs.getMessage());  // Direct access to static method
     }
 }
-        
+

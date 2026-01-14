@@ -10,6 +10,7 @@
 const { Pargs } = require('./pargs.js');
 
 // Call the static method from the class
-console.log(Pargs.getMessage());
+let pargs = new Pargs();
+console.log(pargs.getMessage());
 
 console.log("Main TS program completed!");

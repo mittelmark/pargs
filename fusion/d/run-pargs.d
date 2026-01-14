@@ -3,5 +3,6 @@ import std.stdio;
 import pargs;
 
 void main() {
-    writeln(Pargs.getMessage());
+    Pargs pargs = new Pargs();
+    writeln(pargs.getMessage());
 }   
