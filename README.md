@@ -23,8 +23,8 @@ and use `import pargs` in your import section.
 `~/R/source/pargs.R` and source it within your application
 -  [pargs.tcl](tcl/pargs.tcl) - place this file beside of your application and
 use `source [file join [file dirname [info script]] pargs.tcl]` in your application 
-- [pargs.hpp](cpp/pargs.hpp) - place this file beside your application files
-and use `#include "pargs.hpp"` in your include section.
+- [pargs.hpp](cpp/pargs.hpp) - place this file and beside your application files
+and use `#include "pargs.hpp"` in your include section. If you use an older compiler supporting only C++14 you must as well add [optional.hpp](cpp/optional.hpp) to the same folder.
 
 ## Comparison
 
@@ -42,6 +42,7 @@ and use `#include "pargs.hpp"` in your include section.
 - 2026-06-20:
     - porting pargs.py to pargs.hpp using Haiku 2.5 and manual work for fixing issues and adapting to a compiled language
     - adding Makefile for testing to the C++ port
+    - adding optional-lite from https://github.com/nonstd-lite/optional-lite as fallback for C++14 compilers
 - 2025-12-15: 
     - adding scriptname method to return the main application filename
     - adding support for flags with value so -v TRUE, --verbose FALSE or -v=0 etc

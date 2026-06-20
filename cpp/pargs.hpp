@@ -93,10 +93,19 @@
 #include <string>
 #include <vector>
 #include <regex>
-#include <optional>
+#include "optional.hpp"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#if __cplusplus >= 201703L    
+#include <optional>    
+using std::optional;
+using std::nullopt;
+#else    
+#include "optional.hpp"
+using nonstd::optional;
+using nonstd::nullopt;
+#endif
 
 namespace pargs {
 
@@ -178,7 +187,7 @@ public:
      * @param default_val - default value if the option is not given [default: false]
      * @return the parsed boolean value
      */
-    std::optional<bool> parse_bool(const std::string& ashort, const std::string& along) {
+    optional<bool> parse_bool(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             bool res = true;
@@ -200,7 +209,7 @@ public:
             argv_.erase(argv_.begin() + idx);
             return res;
         }
-        return std::nullopt;
+        return nullopt;
     }
 
     /**
@@ -210,13 +219,13 @@ public:
      * @param along - long option name like '--int'
      * @return optional containing the parsed integer value, or empty if parsing failed
      */
-    std::optional<int> parse_int(const std::string& ashort, const std::string& along) {
+    optional<int> parse_int(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
                 error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
-                return std::nullopt;
+                return nullopt;
             }
 
             std::string val_str = argv_[idx + 1];
@@ -227,10 +236,10 @@ public:
             } else {
                 error("Error: wrong argument for " + ashort + "," + along + "! Not an integer!");
                 std::cout << usage() << std::endl;
-                return std::nullopt;
+                return nullopt;
             }
         }
-        return std::nullopt;
+        return nullopt;
     }
 
     /**
@@ -241,13 +250,13 @@ public:
      * @param default_val - default value if the option is not given
      * @return optional containing the parsed float value, or empty if parsing failed
      */
-    std::optional<float> parse_float(const std::string& ashort, const std::string& along) {
+    optional<float> parse_float(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
                 error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
-                return std::nullopt;
+                return nullopt;
             }
 
             std::string val_str = argv_[idx + 1];
@@ -258,10 +267,10 @@ public:
             } else {
                 error("Error: Wrong argument for " + ashort + "," + along + "! Not a float!");
                 std::cout << usage() << std::endl;
-                return std::nullopt;
+                return nullopt;
             }
         }
-        return std::nullopt;
+        return nullopt;
     }
 
     /**
@@ -278,21 +287,21 @@ public:
      *     std::string str = parser.parse_string("-s", "--string").value_or("Hi");
      * @endcode
      */
-    std::optional<std::string> parse_string(const std::string& ashort,
+    optional<std::string> parse_string(const std::string& ashort,
                                              const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
                 error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
-                return std::nullopt;
+                return nullopt;
             }
 
             std::string val = argv_[idx + 1];
             argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
             return val;
         }
-        return std::nullopt;
+        return nullopt;
     }
 
     /**
@@ -301,9 +310,9 @@ public:
      * @param names - vector of valid subcommands to search against
      * @return subcommand name if valid, or empty string
      */
-    std::optional<std::string> subcommand(const std::vector<std::string>& names) {
+    optional<std::string> subcommand(const std::vector<std::string>& names) {
         if (argv_.size() < 2) {
-            return std::nullopt;
+            return nullopt;
         }
 
         auto it = std::find(names.begin(), names.end(), argv_[1]);
@@ -316,7 +325,7 @@ public:
             std::string valid_cmds = join_vector(names, "','");
             error("Valid subcommands are '" + valid_cmds + "'!");
             std::cout << usage() << std::endl;
-            return std::nullopt;
+            return nullopt;
         }
     }
 
