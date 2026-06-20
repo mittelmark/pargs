@@ -92,7 +92,6 @@
 
 #include <string>
 #include <vector>
-#include <regex>
 #include "optional.hpp"
 #include <iostream>
 #include <algorithm>
@@ -152,9 +151,8 @@ public:
      * if the check was successful, and false if not.
      */
     bool check() {
-        std::regex option_regex("^--?\\w");
         for (const auto& arg : argv_) {
-            if (std::regex_search(arg, option_regex)) {
+            if (checkOption(arg)) {
                 error("Error: Wrong argument: '" + arg + "'!");
                 std::cout << usage() << std::endl;
                 return false;
@@ -229,7 +227,7 @@ public:
             }
 
             std::string val_str = argv_[idx + 1];
-            if (std::regex_match(val_str, std::regex("[0-9]+"))) {
+            if (checkInt(val_str)) {
                 int val = std::stoi(val_str);
                 argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
                 return val;
@@ -260,7 +258,7 @@ public:
             }
 
             std::string val_str = argv_[idx + 1];
-            if (std::regex_match(val_str, std::regex("[.0-9]+"))) {
+            if (checkFloat(val_str)) {
                 float val = std::stof(val_str);
                 argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
                 return val;
@@ -340,7 +338,7 @@ public:
 
         while (std::getline(stream, line)) {
             n++;
-            if (n > 1 && std::regex_match(line, std::regex("\\s*"))) {
+            if (n > 1 && isAllWhitespace(line)) {
                 break;
             }
             res += line + "\n";
@@ -436,6 +434,79 @@ private:
         }
         return result;
     }
+    /**
+     * Check if a given string is an integer.
+     */
+    bool checkInt(const std::string& s) {
+        if (s.empty()) return false;
+        
+        std::size_t i = 0;
+        if (s[i] == '+' || s[i] == '-') {
+            i = 1;
+            if (i == s.size()) return false; // just "+" or "-"
+        }
+        
+        for (; i < s.size(); ++i) {
+            if (s[i] < '0' || s[i] > '9') return false;
+        }
+        return true;
+    }
+    /**
+     * Check if a given string is a float.
+     */
+    bool checkFloat(const std::string& s) {    
+        if (s.empty()) return false;
+        std::size_t i = 0;    
+        if (s[i] == '+' || s[i] == '-') { 
+            i = 1;        
+            if (i == s.size()) return false; // just "+" or "-"    
+        }
+        bool seenDigit = false;    
+        bool seenDot = false;
+        for (; i < s.size(); ++i) {  
+            char c = s[i];        
+            if (c >= '0' && c <= '9') {  
+                seenDigit = true;        
+            } else if (c == '.') {
+                if (seenDot) return false; // multiple dots
+                seenDot = true;        
+            } else {            
+                return false;        
+            }    
+        }
+        // must have at least one digit somewhere    
+        return seenDigit && seenDot;
+    }
+
+    static bool isWordChar(char c) {
+        return (c >= 'A' && c <= 'Z') ||
+              (c >= 'a' && c <= 'z') ||
+              (c >= '0' && c <= '9') ||
+              c == '_';
+    }
+    
+    bool checkOption(const std::string& s) {
+        if (s.empty()) return false;
+        
+        // must start with '-'
+        if (s[0] != '-') return false;
+        
+        // allow optional second '-'
+        std::size_t i = 1;
+        if (i < s.size() && s[i] == '-') ++i;
+        
+        // require at least one word char after '-' or '--'
+        return i < s.size() && isWordChar(s[i]);
+    }
+
+    bool isAllWhitespace(std::string& s) const {
+        for (unsigned char ch : s) {
+            if (ch != ' ' && ch != '\t' && ch != '\n' && ch != '\r' && ch != '\f' && ch != '\v')
+                return false;
+        }
+        return true; // empty string -> true
+    }
+    
 };
 
 } // namespace pargs
