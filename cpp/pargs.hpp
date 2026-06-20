@@ -92,7 +92,6 @@
 
 #include <string>
 #include <vector>
-#include "optional.hpp"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -182,8 +181,7 @@ public:
      *
      * @param ashort - short option name like '-v'
      * @param along - long option name like '--verbose'
-     * @param default_val - default value if the option is not given [default: false]
-     * @return the parsed boolean value
+     * @return the parsed boolean value or std::nullopt
      */
     optional<bool> parse_bool(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
@@ -215,7 +213,7 @@ public:
      *
      * @param ashort - short option name like '-i'
      * @param along - long option name like '--int'
-     * @return optional containing the parsed integer value, or empty if parsing failed
+     * @return optional containing the parsed integer value, or nullopt if parsing failed
      */
     optional<int> parse_int(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
@@ -245,8 +243,7 @@ public:
      *
      * @param ashort - short option name like '-f'
      * @param along - long option name like '--float'
-     * @param default_val - default value if the option is not given
-     * @return optional containing the parsed float value, or empty if parsing failed
+     * @return optional containing the parsed float value, or nullopt if parsing failed
      */
     optional<float> parse_float(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
@@ -276,7 +273,7 @@ public:
      *
      * @param ashort - short option name like '-s'
      * @param along - long option name like '--string'
-     * @return optional containing the parsed string value, or empty if parsing failed
+     * @return optional containing the parsed string value, or nullopt if parsing failed
      * @snippet test.cpp string_example
      * 
      * __Example:__
@@ -306,7 +303,7 @@ public:
      * Check first argument for a valid subcommand.
      *
      * @param names - vector of valid subcommands to search against
-     * @return subcommand name if valid, or empty string
+     * @return subcommand name if valid, or nullopt if invalid
      */
     optional<std::string> subcommand(const std::vector<std::string>& names) {
         if (argv_.size() < 2) {
@@ -369,7 +366,7 @@ public:
      * Should be called after parse and check methods, so usually last.
      *
      * @param max - maximal number of arguments [default: 1]
-     * @param default_val - value if argument is missing [default: "-"]
+     * @param default_val - value if argument(s) is(are) missing [default: "-"]
      * @return vector of positional arguments
      */
     std::vector<std::string> position(size_t max = 1, const std::string& default_val = "-") const {
