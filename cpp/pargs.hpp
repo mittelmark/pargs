@@ -269,12 +269,17 @@ public:
      *
      * @param ashort - short option name like '-s'
      * @param along - long option name like '--string'
-     * @param default_val - default value if the option is not given
      * @return optional containing the parsed string value, or empty if parsing failed
+     * @snippet test.cpp string_example
+     * 
+     * __Example:__
+     * 
+     * @code
+     *     std::string str = parser.parse_string("-s", "--string").value_or("Hi");
+     * @endcode
      */
     std::optional<std::string> parse_string(const std::string& ashort,
-                                             const std::string& along,
-                                             const std::string& default_val = "") {
+                                             const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
@@ -287,7 +292,7 @@ public:
             argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
             return val;
         }
-        return default_val;
+        return std::nullopt;
     }
 
     /**
