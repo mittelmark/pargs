@@ -143,7 +143,7 @@ public:
      * if the check was successful, and false if not.
      */
     bool check() {
-        std::regex option_regex("--?\\w");
+        std::regex option_regex("^--?\\w");
         for (const auto& arg : argv_) {
             if (std::regex_search(arg, option_regex)) {
                 error("Error: Wrong argument: '" + arg + "'!");
@@ -178,8 +178,7 @@ public:
      * @param default_val - default value if the option is not given [default: false]
      * @return the parsed boolean value
      */
-    bool parse_bool(const std::string& ashort, const std::string& along,
-                    bool default_val = false) {
+    std::optional<bool> parse_bool(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             bool res = true;
@@ -201,7 +200,7 @@ public:
             argv_.erase(argv_.begin() + idx);
             return res;
         }
-        return default_val;
+        return std::nullopt;
     }
 
     /**
@@ -209,15 +208,13 @@ public:
      *
      * @param ashort - short option name like '-i'
      * @param along - long option name like '--int'
-     * @param default_val - default value if the option is not given
      * @return optional containing the parsed integer value, or empty if parsing failed
      */
-    std::optional<int> parse_int(const std::string& ashort, const std::string& along,
-                                  int default_val = 0) {
+    std::optional<int> parse_int(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
-                error("Error: missing argument for " + ashort + "," + along + "!");
+                error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
                 return std::nullopt;
             }
@@ -233,7 +230,7 @@ public:
                 return std::nullopt;
             }
         }
-        return default_val;
+        return std::nullopt;
     }
 
     /**
@@ -244,12 +241,11 @@ public:
      * @param default_val - default value if the option is not given
      * @return optional containing the parsed float value, or empty if parsing failed
      */
-    std::optional<float> parse_float(const std::string& ashort, const std::string& along,
-                                      float default_val = 0.0f) {
+    std::optional<float> parse_float(const std::string& ashort, const std::string& along) {
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
-                error("Error: missing argument for " + ashort + "," + along + "!");
+                error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
                 return std::nullopt;
             }
@@ -260,12 +256,12 @@ public:
                 argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
                 return val;
             } else {
-                error("Error: wrong argument for " + ashort + "," + along + "! Not a float!");
+                error("Error: Wrong argument for " + ashort + "," + along + "! Not a float!");
                 std::cout << usage() << std::endl;
                 return std::nullopt;
             }
         }
-        return default_val;
+        return std::nullopt;
     }
 
     /**
@@ -282,7 +278,7 @@ public:
         int idx = find_arg(ashort, along);
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
-                error("Error: missing argument for " + ashort + "," + along + "!");
+                error("Error: Missing argument for " + ashort + "," + along + "!");
                 std::cout << usage() << std::endl;
                 return std::nullopt;
             }
@@ -349,7 +345,7 @@ public:
     /**
      * Returns the main filename with which the application was called.
      */
-    std::string scriptname() const {
+    std::string appname() const {
         if (argv_.empty()) {
             return "";
         }
@@ -398,17 +394,17 @@ private:
     }
 
     /**
-     * Format string by replacing {0} with the script name.
+     * Format string by replacing {0} with the applications name.
      */
     std::string format_string(const std::string& str) const {
         std::string result = str;
-        std::string script_name = scriptname();
+        std::string app_name = appname();
         
-        // Replace {0} with script name
+        // Replace {0} with applications name
         size_t pos = 0;
         while ((pos = result.find("{0}", pos)) != std::string::npos) {
-            result.replace(pos, 3, script_name);
-            pos += script_name.length();
+            result.replace(pos, 3, app_name);
+            pos += app_name.length();
         }
         
         return result;

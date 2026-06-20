@@ -163,7 +163,7 @@ class Pargs:
         
         """
         
-        rhy = re.compile("--?\\w")
+        rhy = re.compile("^--?\\w")
         l = list(filter(rhy.match,self.argv))
         if len(l)>0:
             for i in l:
