@@ -1,22 +1,18 @@
 // -!- C++ -!- //////////////////////////////////////////////////////////////
-//
-//  Date          : $Date$
-//  Author        : $Author$
-//  Created By    : Detlef Groth
+//  Author        : Detlef Groth, UNiversity of Potsdam
 //  Created       : Sat Jun 20 08:07:18 2026
-//  Last Modified : <260620.0942>
+//  Last Modified : <260620.1029>
 //
-//  Description	  :
+//  Description	  : Simple command line parser for Programming Expertise
 //
-//  Notes         :
+//  Notes         : 
 //
-//  History
-//	
+//  History       : 
+//                2026-06-20 - translated via Haiku 2.5 from pargs.py
+//                           - adding manual fixes and extensions by
+//                             the author
+//
 /////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2026 University of Potsdam, Germany.
-// 
-//////////////////////////////////////////////////////////////////////////////
 
 #include "pargs.hpp"
 #include <iostream>
@@ -65,8 +61,8 @@ int main(int argc, char* argv[]) {
    std::string appname = parser.appname(); 
    bool verbose = parser.parse_bool("-v", "--verbose").value_or(false);
    int x = parser.parse_int("-i", "--int").value_or(10);
-   float f = parser.parse_float("-f", "--float").value_or(10.5);
-   std::string str = parser.parse_string("-s", "--string","Hi").value_or("Hi");
+    float f = parser.parse_float("-f", "--float").value_or(10.5);
+    std::string str = parser.parse_string("-s", "--string").value_or("Hi");
    if (!parser.check()) {
       return 1;
    }
