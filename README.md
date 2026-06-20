@@ -11,6 +11,7 @@ parsers like argparse or docopt.
 - [pargs.tcl - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/tcl/pargs.html)
 - [pargs.py - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/python/pargs.html)
 - [pargs.R - Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/pargs/blob/master/R/pargs.html)
+- pargs.hpp
 
 ## Installation
 
@@ -22,6 +23,8 @@ and use `import pargs` in your import section.
 `~/R/source/pargs.R` and source it within your application
 -  [pargs.tcl](tcl/pargs.tcl) - place this file beside of your application and
 use `source [file join [file dirname [info script]] pargs.tcl]` in your application 
+- [pargs.hpp](cpp/pargs.hpp) - place this file beside your application files
+and use `#include "pargs.hpp"` in your include section.
 
 ## Comparison
 
@@ -36,6 +39,9 @@ use `source [file join [file dirname [info script]] pargs.tcl]` in your applicat
 
 ## Changes
 
+- 2026-06-20:
+    - porting pargs.py to pargs.hpp using Haiku 2.5 and manual work for fixing issues and adapting to a compiled language
+    - adding Makefile for testing to the C++ port
 - 2025-12-15: 
     - adding scriptname method to return the main application filename
     - adding support for flags with value so -v TRUE, --verbose FALSE or -v=0 etc
@@ -51,7 +57,7 @@ case insensitive syntax
 ## Author and Copyright
 
 
-@ 2025 - Detlef  Groth,  University  of  Potsdam,  Germany  -
+@ 2025-2026 - Detlef  Groth,  University  of  Potsdam,  Germany  -
   dgroth(at)uni(minus)potsdam(dot)de
 
 ## License
