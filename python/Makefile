@@ -1,11 +1,6 @@
 ##-*- makefile -*-############################################################
 #
-# Copyright (C) 2025 MicroEmacs User.
-#
-# All rights reserved.
-#
-# Synopsis:    
-# Authors:     MicroEmacs User
+# Copyright (C) 2025 Detlef Groth, University of Potsdam
 #
 ##############################################################################
 
