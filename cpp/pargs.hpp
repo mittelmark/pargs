@@ -119,7 +119,7 @@ public:
      */
     Pargs(const std::string& doc, std::vector<std::string>& argv,
           const std::string& version = "0.0.0", bool color = true)
-        : doc_(doc), argv_(argv), version_(version), color_(color) {
+        : doc_(doc), argv_(argv), version_(version), color_(color), has_error_(false) {
         
         // Parse key=val syntax into separate arguments
         size_t i = 1;
@@ -143,7 +143,11 @@ public:
             DEF_ = "";
         }
     }
-
+    ~Pargs () {
+        if (has_error_) {
+            std::cout << usage() << std::endl;
+        }
+    }
     /**
      * Check for any not supported option present in argv.
      * Should be used only after the parse methods. Returns true
@@ -153,7 +157,7 @@ public:
         for (const auto& arg : argv_) {
             if (checkOption(arg)) {
                 error("Error: Wrong argument: '" + arg + "'!");
-                std::cout << usage() << std::endl;
+                //std::cout << usage() << std::endl;
                 return false;
             }
         }
@@ -165,10 +169,19 @@ public:
      *
      * @param msg - the message to display
      */
-    void error(const std::string& msg) const {
+    void error(const std::string& msg)  {
         std::cout << RED_ << msg << DEF_ << std::endl;
+        has_error_ = true;
     }
-
+    /**
+     * Return if there was an error during command line
+     *  parsing.
+     *
+     * @return true if there was an error, otherwise false.
+     */
+    bool has_error () {
+        return has_error_;
+    }
     /**
      * Display full help page.
      */
@@ -220,7 +233,8 @@ public:
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
                 error("Error: Missing argument for " + ashort + "," + along + "!");
-                std::cout << usage() << std::endl;
+                // std::cout << usage() << std::endl;
+                argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 1);                
                 return nullopt;
             }
 
@@ -231,7 +245,7 @@ public:
                 return val;
             } else {
                 error("Error: wrong argument for " + ashort + "," + along + "! Not an integer!");
-                std::cout << usage() << std::endl;
+                argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
                 return nullopt;
             }
         }
@@ -250,7 +264,6 @@ public:
         if (idx > -1) {
             if (idx + 1 >= static_cast<int>(argv_.size())) {
                 error("Error: Missing argument for " + ashort + "," + along + "!");
-                std::cout << usage() << std::endl;
                 return nullopt;
             }
 
@@ -261,7 +274,7 @@ public:
                 return val;
             } else {
                 error("Error: Wrong argument for " + ashort + "," + along + "! Not a float!");
-                std::cout << usage() << std::endl;
+                argv_.erase(argv_.begin() + idx, argv_.begin() + idx + 2);
                 return nullopt;
             }
         }
@@ -380,15 +393,74 @@ public:
         }
         return res;
     }
+    /**
+     * Check if a given string is an integer or a float.
+     * 
+     * @param std::string s - string with integer
+     * @return true if s is an integer or a float
+     */
+    bool is_number (const std::string s) {
+        return checkInt(s) || checkFloat(s);
+    }
 
 private:
     std::string doc_;
     std::vector<std::string> argv_;
     std::string version_;
     bool color_;
+    bool has_error_;
     std::string RED_;
     std::string DEF_;
-
+    /**
+     * Check if a given string is an integer.
+     * 
+     * @param std::string s - string with integer
+     * @return true if s is an integer
+     */
+    bool checkInt(const std::string& s) {
+        if (s.empty()) return false;
+        
+        std::size_t i = 0;
+        if (s[i] == '+' || s[i] == '-') {
+            i = 1;
+            if (i == s.size()) return false; // just "+" or "-"
+        }
+        
+        for (; i < s.size(); ++i) {
+            if (s[i] < '0' || s[i] > '9') return false;
+        }
+        return true;
+    }
+    /**
+     * Check if a given string is a float.
+     * 
+     * @param std::string s - string with float
+     * @return - true if s is a float
+     * 
+     */
+    bool checkFloat(const std::string& s) {    
+        if (s.empty()) return false;
+        std::size_t i = 0;    
+        if (s[i] == '+' || s[i] == '-') { 
+            i = 1;        
+            if (i == s.size()) return false; // just "+" or "-"    
+        }
+        bool seenDigit = false;    
+        bool seenDot = false;
+        for (; i < s.size(); ++i) {  
+            char c = s[i];        
+            if (c >= '0' && c <= '9') {  
+                seenDigit = true;        
+            } else if (c == '.') {
+                if (seenDot) return false; // multiple dots
+                seenDot = true;        
+            } else {            
+                return false;        
+            }    
+        }
+        // must have at least one digit somewhere    
+        return seenDigit && seenDot;
+    }
     /**
      * Find the index of an argument by short or long name.
      * Returns -1 if not found.
@@ -430,49 +502,6 @@ private:
             result += vec[i];
         }
         return result;
-    }
-    /**
-     * Check if a given string is an integer.
-     */
-    bool checkInt(const std::string& s) {
-        if (s.empty()) return false;
-        
-        std::size_t i = 0;
-        if (s[i] == '+' || s[i] == '-') {
-            i = 1;
-            if (i == s.size()) return false; // just "+" or "-"
-        }
-        
-        for (; i < s.size(); ++i) {
-            if (s[i] < '0' || s[i] > '9') return false;
-        }
-        return true;
-    }
-    /**
-     * Check if a given string is a float.
-     */
-    bool checkFloat(const std::string& s) {    
-        if (s.empty()) return false;
-        std::size_t i = 0;    
-        if (s[i] == '+' || s[i] == '-') { 
-            i = 1;        
-            if (i == s.size()) return false; // just "+" or "-"    
-        }
-        bool seenDigit = false;    
-        bool seenDot = false;
-        for (; i < s.size(); ++i) {  
-            char c = s[i];        
-            if (c >= '0' && c <= '9') {  
-                seenDigit = true;        
-            } else if (c == '.') {
-                if (seenDot) return false; // multiple dots
-                seenDot = true;        
-            } else {            
-                return false;        
-            }    
-        }
-        // must have at least one digit somewhere    
-        return seenDigit && seenDot;
     }
 
     static bool isWordChar(char c) {
